@@ -1,26 +1,19 @@
 package sx
 
-class ImportadorExistenciasJob {
-
-  def importadorDeExistencias
-
+class ImportadorDeCobrosJob {
+  def importadorDeCobros
     static triggers = {
-      cron name:   'impExistencia',   startDelay: 20000, cronExpression: '0 0/15 * * * ?'
+       cron name:   'impCobros',   startDelay: 10000, cronExpression: '0 30 19 * * ?'
     }
 
     def execute() {
-
       println "************************************************************"
       println "*                                                          *"
-      println "*                    Importando Existencia                 *"
+      println "*                    Importador De Cobros                  *"
       println "*                                                          *"
       println "************************************************************"
 
-      try{
-        importadorDeExistencias.importar()
-      }catch(Exception e){
-        e.printStackTrace
-      }
+      importadorDeCobros.importar()
 
     }
 }

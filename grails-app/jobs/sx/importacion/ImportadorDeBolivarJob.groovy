@@ -18,16 +18,16 @@ class ImportadorDeBolivarJob {
 
        def sucursal = 'BOLIVAR'
 
-       try{
-          importadorDeExistencias.importar(sucursal)
-       }catch (Exception e){
-              e.printStackTrace()
-      }
-      try{
-         importadorDeClientes.importar(sucursal)
-      }catch (Exception e){
-             e.printStackTrace()
-     }
+           try{
+              importadorDeExistencias.importar(sucursal)
+           }catch (Exception e){
+                  e.printStackTrace()
+          }
+          try{
+             importadorDeClientes.importar(sucursal)
+          }catch (Exception e){
+                 e.printStackTrace()
+         }
 
 
       }

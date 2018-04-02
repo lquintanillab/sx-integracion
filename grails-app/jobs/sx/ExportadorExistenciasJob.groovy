@@ -1,11 +1,26 @@
 package sx
 
 class ExportadorExistenciasJob {
+
+  def exportadorDeExistencia
+
     static triggers = {
-      simple repeatInterval: 5000l // execute job once in 5 seconds
+      cron name:   'expExistencia',   startDelay: 20000, cronExpression: '0 0/15 * * * ?'
     }
 
     def execute() {
-        // execute job
+
+      println "************************************************************"
+      println "*                                                          *"
+      println "*                    Exportando Existencia                 *"
+      println "*                                                          *"
+      println "************************************************************"
+
+        try{
+          exportadorDeExistencia.exportar()
+        }catch(Exception e){
+            e.printStackTrace()
+        }
+
     }
 }

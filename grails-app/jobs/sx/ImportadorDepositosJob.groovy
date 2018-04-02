@@ -9,16 +9,16 @@ def importadorDeDepositos
     }
 
     def execute() {
-      /*
+
       println "************************************************************"
        println "*                                                          *"
        println "*                    Importando Depositos                  *"
        println "*           ${new Date()}                   *"
        println "*                                                          *"
        println "************************************************************"
-*/
+
        try {
-          //importadorDeDepositos.importar()
+          importadorDeDepositos.importar()
        }catch (Exception e){
            e.printStackTrace()
        }
