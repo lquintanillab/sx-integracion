@@ -16,6 +16,12 @@ class ImportadorDeFichasJob {
       println "*                                                          *"
       println "************************************************************"
 
-      importadorDeFichas.importar()
+      try{
+        importadorDeFichas.importar()
+      }catch(Exception e){
+        e.printStackTrace()
+      }
+
+
     }
 }

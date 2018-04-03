@@ -19,7 +19,7 @@ class ImportadorExistenciasJob {
       try{
         importadorDeExistencias.importar()
       }catch(Exception e){
-        e.printStackTrace
+        e.printStackTrace()
       }
 
     }
