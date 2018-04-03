@@ -53,7 +53,7 @@ class ImportadorDeVentasCredito{
 
       def config= EntityConfiguration.findByName("Cfdi")
 
-      def queryAuditLog="select * from audit_log a join cfdi c on(a.persisted_object_id=c.id) join cuenta_por_cobrar u on (u.cfdi_id=c.id) where date_replicated is null and u.tipo='CRE' AND event_name='INSERT' order by a.date_created"
+      def queryAuditLog="select c.*,a.persisted_object_id from audit_log a join cfdi c on(a.persisted_object_id=c.id) join cuenta_por_cobrar u on (u.cfdi_id=c.id) where date_replicated is null and u.tipo='CRE' AND event_name='INSERT' order by a.date_created"
 
       def cfdis=sqlSuc.rows(queryAuditLog)
 
@@ -61,6 +61,7 @@ class ImportadorDeVentasCredito{
 
       cfdis.each{row ->
 
+      //  try{
           def cfdi=sqlCen.firstRow(queryId,[row.id])
 
           if(cfdi){
@@ -198,7 +199,10 @@ class ImportadorDeVentasCredito{
               }
           }
           sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE PERSISTED_OBJECT_ID=? ", ["Registro replicado",row.persisted_object_id])
-      }
+    /*  }catch(Exception e){
+          e.printStackTrace()
+      }*/
+    }
 
   }
 

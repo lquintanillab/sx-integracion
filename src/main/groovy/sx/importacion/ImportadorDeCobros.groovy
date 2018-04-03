@@ -25,6 +25,7 @@ class ImportadorDeCobros{
       def importar(){
           importar(new Date())
       }
+      
       def importar(fecha){
         println ("Importando Cobros del : ${fecha.format('dd/MM/yyyy')}" )
 

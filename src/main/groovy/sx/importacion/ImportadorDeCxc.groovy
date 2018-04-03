@@ -31,8 +31,10 @@ class ImportadorDeCxc{
       importarOperacionesVentaFecha(fecha)
     }
 
-   def importarOperacionesVentaFecha(fecha){
+   def importarOperacionesVentaFecha(fecha1){
 
+
+     def fecha=fecha1.format('yyyy/MM/dd')
       println "Importando operaciones de venta  "+fecha
       def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
@@ -255,7 +257,9 @@ class ImportadorDeCxc{
 
 
 
-   def importarOperacionesVentaSucursalFecha(sucursal,fecha){
+   def importarOperacionesVentaSucursalFecha(sucursal,fecha1){
+
+     def fecha=fecha1.format('yyyy/MM/dd')
 
       println "Importando operaciones de venta  "+fecha
     //  def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
