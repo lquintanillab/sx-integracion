@@ -75,7 +75,7 @@ class ImportadorDeVentasCredito{
 
           def queryCxc="Select * from cuenta_por_cobrar where cfdi_id=?"
           def queryCxcCen="select * from cuenta_por_cobrar where id=?"
-          def cxc=sqlSuc.firstRow(queryCxc,[cfdi.id])
+          def cxc=sqlSuc.firstRow(queryCxc,[row.id])
 
 
           if(cxc){
