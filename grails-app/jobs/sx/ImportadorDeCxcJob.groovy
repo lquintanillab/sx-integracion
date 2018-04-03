@@ -9,6 +9,19 @@ class ImportadorDeCxcJob {
     }
 
     def execute() {
-      importadorDeCxc.importarOperacionesVenta()
+
+      println "************************************************************"
+      println "*                                                          *"
+      println "*              Importador De CuentaPorCobrar               *"
+      println "*                                                          *"
+      println "************************************************************"
+
+      try{
+        importadorDeCxc.importarOperacionesVenta()
+      }catch(Exception e){
+        e.printStackTrace()
+      }
+
+
     }
 }
