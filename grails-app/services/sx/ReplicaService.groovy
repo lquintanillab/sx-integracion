@@ -227,7 +227,6 @@ class ReplicaService {
 
     def afterImportTraslados(def auditOrigen,def row,def serverOrigen, def centralSql ){
 
-
         def sucursal=new Sucursal()
 
         if(auditOrigen.name== 'Traslado'){

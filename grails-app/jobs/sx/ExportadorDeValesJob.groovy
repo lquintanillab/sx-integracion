@@ -9,7 +9,7 @@ class ExportadorDeValesJob {
     }
 
     def execute() {
-
+/*
       println "************************************************************"
       println "*                                                          *"
       println "*                    Exportando Vales                      *"
@@ -20,6 +20,6 @@ class ExportadorDeValesJob {
           exportadorDeVales.exportar()
       }catch (Exception e){
           e.printStackTrace()
-      }
+      }*/
     }
 }

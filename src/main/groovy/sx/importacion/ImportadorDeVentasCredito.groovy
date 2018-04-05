@@ -61,7 +61,7 @@ class ImportadorDeVentasCredito{
 
       cfdis.each{row ->
 
-      //  try{
+        try{
           def cfdi=sqlCen.firstRow(queryId,[row.id])
 
           if(cfdi){
@@ -199,9 +199,9 @@ class ImportadorDeVentasCredito{
               }
           }
           sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE PERSISTED_OBJECT_ID=? ", ["Registro replicado",row.persisted_object_id])
-    /*  }catch(Exception e){
+      }catch(Exception e){
           e.printStackTrace()
-      }*/
+      }
     }
 
   }

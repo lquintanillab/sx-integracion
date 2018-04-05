@@ -75,7 +75,7 @@ class ImportadorDeVales{
 
           if(solSuc || audit.event_name=='DELETE'){
 
-          // try{
+           try{
               switch(audit.event_name) {
                 case 'INSERT':
                   SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName(config.tableName)
@@ -121,7 +121,7 @@ class ImportadorDeVales{
                 break
               }
 
-    /*       }
+           }
          catch (DuplicateKeyException dk) {
                   println dk.getMessage()
               //    println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
@@ -132,7 +132,7 @@ class ImportadorDeVales{
                 String err="Error importando a central: "
 
                   sqlSuc.execute("UPDATE AUDIT_LOG SET MESSAGE=?,DATE_REPLICATED=null WHERE ID=? ", [err,audit.id])
-              }*/
+              }
 
           }
           else{

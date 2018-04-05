@@ -26,11 +26,99 @@ class ExportadorDeVales{
 
 
   def exportar(){
-    replicaService.exportar('SolicitudDeTraslado')
+      println ("Exportando Vales" )
+
+        def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
+
+        def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
+
+        servers.each{server ->
+
+          exportarServer(server)
+        }
   }
 
-  def exportar(nombreSuc){
-    replicaService.exportar('SolicitudDeTraslado',nombreSuc)
+  def exportarSucursal(nombreSuc){
+    def server=DataSourceReplica.findByServer(nombreSuc)
+      exportarServer(server)
+  }
+
+  def exportarServer(server){
+    def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
+
+    def sqlSuc=new Sql(dataSourceSuc)
+    def sqlCen=new Sql(dataSource)
+
+    def config= EntityConfiguration.findByName("SolicitudDeTraslado")
+    def configDet= EntityConfiguration.findByName("SolicitudDeTrasladoDet")
+
+    def queryAuditLog="Select * from audit_log where date_replicated is null and name='SolicitudDeTraslado'"
+
+    def audits=sqlCen.rows(queryAuditLog)
+
+    def queryId="select * from solicitud_de_traslado  where id=?"
+
+    audits.each{ audit ->
+        println audit
+        def solCen=sqlCen.firstRow(queryId,[audit.persisted_object_id])
+
+        if(solCen || audit.event_name=='DELETE'){
+
+              try{
+                    switch(audit.event_name) {
+                      case 'INSERT':
+                      SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
+                      def res=insert.execute(solCen)
+
+                      def partidasCen=sqlCen.rows("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solCen.id])
+                      partidasCen.each{ detalle ->
+                          SimpleJdbcInsert insert1=new SimpleJdbcInsert(dataSourceSuc).withTableName(configDet.tableName)
+                          insert1.execute(detalle)
+                      }
+                      if(res){
+
+                          sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
+                      }
+                      break
+                      case 'UPDATE':
+                          int updated=sqlSuc.executeUpdate(solCen, config.updateSql)
+                          println "************************************"
+                          def partidasCen=sqlCen.rows("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solCen.id])
+                          partidasCen.each{ detalle ->
+                              sqlSuc.executeUpdate(detalle, configDet.updateSql)
+                          }
+                          if(updated){
+                              println "Se actualizo el registro se va a crear auditLog"
+                              sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ACTUALIZADO: ",audit.id])
+                          }else{
+                              sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["REVISAR ",audit.id])
+                          }
+
+                      break
+                      case 'DELETE':
+
+                      break
+                      default:
+
+                      break
+                    }
+
+              }catch (DuplicateKeyException dk) {
+                       println dk.getMessage()
+                   //    println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
+                       sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
+
+                   }catch (Exception e){
+                       e.printStackTrace()
+                     String err="Error importando a central: "
+
+                       sqlSuc.execute("UPDATE AUDIT_LOG SET MESSAGE=?,DATE_REPLICATED=null WHERE ID=? ", [err,audit.id])
+                   }
+
+        }
+    }
+
+
   }
 
 }
