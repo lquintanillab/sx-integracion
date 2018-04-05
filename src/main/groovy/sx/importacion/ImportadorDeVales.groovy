@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
 import sx.DataSourceReplica
 import sx.EntityConfiguration
+import sx.Sucursal
 import sx.AuditLog
 import groovy.sql.Sql
 import org.springframework.beans.factory.annotation.Qualifier
@@ -34,7 +35,7 @@ class ImportadorDeVales{
 
       def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
-      servers.each(){server ->
+      servers.each{server ->
 
       //  println "***  Importando Vales: ${server.server} ******* ${server.url}****  "
         importarServer(server)
@@ -74,13 +75,13 @@ class ImportadorDeVales{
 
           if(solSuc || audit.event_name=='DELETE'){
 
-            try{
+          // try{
               switch(audit.event_name) {
                 case 'INSERT':
                   SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName(config.tableName)
                   def res=insert.execute(solSuc)
 
-                  def partidasSuc=sqlSuc("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solSuc.id])
+                  def partidasSuc=sqlSuc.rows("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solSuc.id])
                   partidasSuc.each{ detalle ->
                       SimpleJdbcInsert insert1=new SimpleJdbcInsert(dataSource).withTableName(configDet.tableName)
                       insert1.execute(detalle)
@@ -94,11 +95,11 @@ class ImportadorDeVales{
 
                 break
                 case 'UPDATE':
-                        int updated=slqCen.executeUpdate(solSuc, config.updateSql)
-
-                        def partidasSuc=sqlSuc("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solSuc.id])
+                        int updated=sqlCen.executeUpdate(solSuc, config.updateSql)
+                        println "************************************"
+                        def partidasSuc=sqlSuc.rows("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solSuc.id])
                         partidasSuc.each{ detalle ->
-                            slqCen.executeUpdate(detalle, configDet.updateSql)
+                            sqlCen.executeUpdate(detalle, configDet.updateSql)
                         }
 
                         afterImportVales(audit,solSuc,sqlCen)
@@ -120,17 +121,18 @@ class ImportadorDeVales{
                 break
               }
 
-           }
-           catch (DuplicateKeyException dk) {
+    /*       }
+         catch (DuplicateKeyException dk) {
                   println dk.getMessage()
               //    println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
                   sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
 
               }catch (Exception e){
-
+                  e.printStackTrace()
                 String err="Error importando a central: "
+
                   sqlSuc.execute("UPDATE AUDIT_LOG SET MESSAGE=?,DATE_REPLICATED=null WHERE ID=? ", [err,audit.id])
-              }
+              }*/
 
           }
           else{
