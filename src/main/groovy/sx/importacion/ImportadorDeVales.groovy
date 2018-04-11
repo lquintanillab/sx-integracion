@@ -37,7 +37,7 @@ class ImportadorDeVales{
 
       servers.each{server ->
 
-      //  println "***  Importando Vales: ${server.server} ******* ${server.url}****  "
+        println "***  Importando Vales: ${server.server} ******* ${server.url}****  "
         importarServer(server)
       }
 

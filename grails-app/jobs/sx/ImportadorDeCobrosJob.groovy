@@ -7,13 +7,18 @@ class ImportadorDeCobrosJob {
     }
 
     def execute() {
+
       println "************************************************************"
       println "*                                                          *"
       println "*                    Importador De Cobros                  *"
       println "*                                                          *"
       println "************************************************************"
+      try{
+        importadorDeCobros.importar()
+      }catch(Exception e){
+        e.printStackTrace()
+      }
 
-      importadorDeCobros.importar()
 
     }
 }

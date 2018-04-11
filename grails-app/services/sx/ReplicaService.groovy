@@ -315,10 +315,10 @@ class ReplicaService {
                                 case 'UPDATE':
                                     int updated=targetSql.executeUpdate(row, config.updateSql)
                                     if(updated) {
-                                      //  println '***************  Actualizando audit log'+audit.id
+                                        println '***************  Actualizando audit log'+audit.id
                                         centralSql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ACTUALIZADO: ", audit.id])
                                     }else{
-                                      //  println '***************  No se actualizo'+audit.id
+                                        println '***************  No se actualizo'+audit.id
                                     }
                                     break
                                 case 'DELETE':

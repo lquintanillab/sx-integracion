@@ -1,11 +1,26 @@
 package sx
 
 class ImportadorDeTrasladosJob {
+
+  def importadorDeTraslados
+
     static triggers = {
-      simple repeatInterval: 5000l // execute job once in 5 seconds
+        cron name:   'expTraslados',   startDelay: 20000, cronExpression: '0 0/15 * * * ?'
     }
 
     def execute() {
-        // execute job
+
+      println "************************************************************"
+      println "*                                                          *"
+      println "*                    Importando Traslados                  *"
+      println "*           ${new Date()}                   *"
+      println "*                                                          *"
+      println "************************************************************"
+        try{
+            importadorDeTraslados.importar()
+        }catch(Exception e ){
+          e.printStackTrace()
+        }
+
     }
 }

@@ -6,12 +6,16 @@ class ExportadorDe5FebreroJob {
   def exportadorDeClientesCredito
   def exportadorDeProductos
   def exportadorDeExistencia
+  def exportadorDeVales
+  def exportadorDeTraslados
 
     static triggers = {
       cron name:   'exp5Febrero',   startDelay: 20000, cronExpression: '0 0/5 * * * ?'
     }
 
-    def execute() {
+    def execute()
+    {
+
       println "************************************************************"
       println "*                                                          *"
       println "*                    Exportando 5 Febrero                  *"
@@ -40,6 +44,16 @@ class ExportadorDe5FebreroJob {
        }catch (Exception e){
               e.printStackTrace()
       }
+      try{
+         exportadorDeVales.exportarSucursal(sucursal)
+      }catch (Exception e){
+             e.printStackTrace()
+     }
+     try{
+          exportadorDeTraslados.exportarSucursal(sucursal)
+     }catch (Exception e){
+            e.printStackTrace()
+    }
 
     }
 }

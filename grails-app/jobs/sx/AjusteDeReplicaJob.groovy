@@ -32,12 +32,6 @@ def sincronizacionService
       }
 
 
-      try {
-          sincronizacionService.arreglaDestinoCompras()
-      }catch (Exception e){
-          e.printStackTrace()
-      }
-
 
     }
 }

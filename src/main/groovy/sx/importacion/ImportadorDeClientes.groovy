@@ -34,4 +34,12 @@ class ImportadorDeClientes{
     replicaService.importar('Cliente',nombreSuc)
   }
 
+  def importarComunicacionEmpresa(){
+    replicaService.importar('ComunicacionEmpresa')
+  }
+
+  def importarComunicacionEmpresa(nombreSuc){
+    replicaService.importar('ComunicacionEmpresa',nombreSuc)
+  }
+
 }

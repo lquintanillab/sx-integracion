@@ -1,4 +1,4 @@
-package sx.importacion
+  package sx.importacion
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -50,7 +50,7 @@ class ImportadorDeTraslados{
 
     def importarServer(server){
 
-      println ("Importando Traslados"+server.server+"*************"+server.url )
+      println ("Importando Traslados"+server.server+"----------------"+server.url )
 
       def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
 
@@ -59,19 +59,21 @@ class ImportadorDeTraslados{
 
       def config= EntityConfiguration.findByName("Traslado")
       def configDet= EntityConfiguration.findByName("TrasladoDet")
-      def confgCfdi= EntityConfiguration.findByName("Cfdi")
-      def configInvent= EntityConfiguration.findByName("Inventario")
+      def configCfdi= EntityConfiguration.findByName("Cfdi")
+      def configInv= EntityConfiguration.findByName("Inventario")
 
-      def queryAuditLog="Select * from audit_log where date_replicated is null and name='Traslado' and date(date_created>='2018/04/05')"
+      def queryAuditLog="Select * from audit_log where date_replicated is null and name='Traslado' and date(date_created)>='2018/04/06'"
 
       def audits=sqlSuc.rows(queryAuditLog)
 
       def queryId="select * from traslado  where id=?"
 
+
+
       audits.each{ audit ->
 
-           println "***  Importando Traslados: ${server.server} ******* ${server.url}****  "
-          println audit
+           println ("Importando ************-*-*-**-*-*-*-**-*-*-**-*-*-*-*-*--*-**-* " )
+           println audit
 
           def trdSuc=sqlSuc.firstRow(queryId,[audit.persisted_object_id])
 
@@ -80,9 +82,96 @@ class ImportadorDeTraslados{
           // try{
               switch(audit.event_name) {
                 case 'INSERT':
+                  if(trdSuc.cfdi_id){
+                    def queryCfdi="Select * from cfdi where id=?"
+                    def cfdiSuc=sqlSuc.firstRow(queryCfdi,[trdSuc.cfdi_id])
+                    def cfdiCen=sqlCen.firstRow(queryCfdi,[trdSuc.cfdi_id])
+                    if(!cfdiCen){
+                        SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName(configCfdi.tableName)
+                        def res=insert.execute(cfdiSuc)
+                    }
+                  }
+                    def trdCen=sqlCen.firstRow(queryId,[audit.persisted_object_id])
+                    if(!trdCen){
+                        SimpleJdbcInsert insert1=new SimpleJdbcInsert(dataSource).withTableName(config.tableName)
+                        def res=insert1.execute(trdSuc)
+                        if(res){
+                            sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
+                        }
+                    }
+                      println "-------------------------"+trdSuc
+
+                def partidasSuc=sqlSuc.rows("select * from traslado_det where traslado_id=?",[trdSuc.id])
+                partidasSuc.each{ detalle ->
+                  println "***********************"+detalle
+                  if(detalle.inventario_id){
+                    def queryInv="Select * from Inventario where id=?"
+                    def invSuc=sqlSuc.firstRow(queryInv,[detalle.inventario_id])
+                    def invCen=sqlCen.firstRow(queryInv,[detalle.inventario_id])
+                      if(!invCen){
+                          SimpleJdbcInsert insert2=new SimpleJdbcInsert(dataSource).withTableName(configInv.tableName)
+                          insert2.execute(invSuc)
+                      }
+                  }
+                  def sqlDetCen="Select * from traslado_det where id=?"
+                  def detCen=sqlCen.firstRow(sqlDetCen,[detalle.id])
+                  if(!detCen){
+                      SimpleJdbcInsert insert3=new SimpleJdbcInsert(dataSource).withTableName(configDet.tableName)
+                      insert3.execute(detalle)
+                  }
+                }
+                      afterImportTraslados(audit,trdSuc,sqlCen)
+
 
                 break
                 case 'UPDATE':
+
+                if(trdSuc.cfdi_id){
+                  def queryCfdi="Select * from cfdi where id=?"
+                  def cfdiSuc=sqlSuc.firstRow(queryCfdi,[trdSuc.cfdi_id])
+                  def cfdiCen=sqlCen.firstRow(queryCfdi,[trdSuc.cfdi_id])
+                  if(!cfdiCen){
+                      SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName(configCfdi.tableName)
+                      def res=insert.execute(cfdiSuc)
+                  }
+                }
+                  def trdCen=sqlCen.firstRow(queryId,[audit.persisted_object_id])
+                  if(!trdCen){
+                      SimpleJdbcInsert insert1=new SimpleJdbcInsert(dataSource).withTableName(config.tableName)
+                      def res=insert1.execute(trdSuc)
+                      if(res){
+                          sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
+                      }
+                  }else{
+                    def res=sqlSuc.executeUpdate(trdSuc, config.updateSql)
+                     if(res){
+                         sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
+                     }
+                  }
+                    println "-------------------------"+trdSuc
+
+              def partidasSuc=sqlSuc.rows("select * from traslado_det where traslado_id=?",[trdSuc.id])
+              partidasSuc.each{ detalle ->
+                println "***********************"+detalle
+                if(detalle.inventario_id){
+                  def queryInv="Select * from Inventario where id=?"
+                  def invSuc=sqlSuc.firstRow(queryInv,[detalle.inventario_id])
+                  def invCen=sqlCen.firstRow(queryInv,[detalle.inventario_id])
+                    if(!invCen){
+                        SimpleJdbcInsert insert2=new SimpleJdbcInsert(dataSource).withTableName(configInv.tableName)
+                        insert2.execute(invSuc)
+                    }
+                }
+                def sqlDetCen="Select * from traslado_det where id=?"
+                def detCen=sqlCen.firstRow(sqlDetCen,[detalle.id])
+                if(!detCen){
+                    SimpleJdbcInsert insert3=new SimpleJdbcInsert(dataSource).withTableName(configDet.tableName)
+                    insert3.execute(detalle)
+                }else{
+                   sqlCen.executeUpdate(detalle, configDet.updateSql)
+                }
+              }
+                    afterImportTraslados(audit,trdSuc,sqlCen)
 
                 break
 
@@ -119,6 +208,32 @@ class ImportadorDeTraslados{
   }
 
 
+  def afterImportTraslados(def auditOrigen,def row, def centralSql ){
+
+      def sucursal=new Sucursal()
+
+      if(auditOrigen.name== 'Traslado'){
+          sucursal=resolveSucursal(row.sucursal_id)
+      }else{
+          def trd=centralSql.firstRow("select * from traslado where id=?",[row.traslado_id])
+          sucursal=resolveSucursal(trd.sucursal_id)
+      }
+
+
+      def audit=new AuditLog()
+
+      audit.name =auditOrigen.name
+      audit.tableName=auditOrigen.table_name
+      audit.persistedObjectId = auditOrigen.persisted_object_id
+      audit.eventName =auditOrigen.event_name
+      audit.source ='CENTRAL'
+      audit.dateCreated = audit.lastUpdated = new Date()
+      audit.target=sucursal.nombre
+
+      audit.save(failOnError: true,flush: true)
+
+
+  }
 
   def resolveSucursal(def sucursalId){
       def sucursal=Sucursal.get(sucursalId)

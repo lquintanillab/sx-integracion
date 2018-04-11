@@ -1,4 +1,4 @@
-package sx.exportacion
+  package sx.exportacion
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Component
@@ -114,7 +114,6 @@ class ExportadorDeVales{
 
                        sqlSuc.execute("UPDATE AUDIT_LOG SET MESSAGE=?,DATE_REPLICATED=null WHERE ID=? ", [err,audit.id])
                    }
-
         }
     }
 

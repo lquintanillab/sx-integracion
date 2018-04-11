@@ -33,7 +33,6 @@ class ExportadorDeDepositos{
       def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
       servers.each(){server ->
-
     //    println "***  Exportando Depositos: ${server.server} ******* ${server.url}****  "
         exportarServer(server)
       }
@@ -42,10 +41,7 @@ class ExportadorDeDepositos{
   def exportar(nombreSuc){
 
         def server=DataSourceReplica.findByServer(nombreSuc)
-
-
-      //  println "nombre: ${nombreSuc}  URL: ${server.url} "
-
+        //  println "nombre: ${nombreSuc}  URL: ${server.url} "
           exportarServer(server)
   }
 
@@ -69,8 +65,6 @@ class ExportadorDeDepositos{
 
     audits.each{audit ->
 
-
-
               def queryDep="select * from solicitud_de_deposito where id=?"
               def deposito=sqlCen.firstRow(queryDep,[audit.persisted_object_id])
 
@@ -87,12 +81,10 @@ class ExportadorDeDepositos{
                             def cobroSuc=sqlSuc.firstRow("select * from cobro where id=?",[cobroCen.id])
 
                             if(!cobroSuc){
-
                               SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(configCobro.tableName)
                               def res=insert.execute(cobroCen)
                             }
                             if(cobroCen.forma_de_pago=='TRANSFERENCIA'){
-
                                 def cobroTranSuc=sqlSuc.firstRow("select * from cobro_transferencia where cobro_id=?",[cobroCen.id])
                                 if(!cobroTranSuc){
                                   def cobroTranCen=sqlCen.firstRow("select * from cobro_transferencia where cobro_id=?",[cobroCen.id])
@@ -101,11 +93,8 @@ class ExportadorDeDepositos{
                                     def res=insert.execute(cobroTranCen)
                                   }
                                 }
-
                             }
                             if(cobroCen.forma_de_pago=='DEPOSITO'){
-
-
                               def cobroDepSuc=sqlSuc.firstRow("select * from cobro_deposito where cobro_id=?",[cobroSuc.id])
                               if(!cobroDepSuc){
                                 def cobroDepCen=sqlCen.firstRow("select * from cobro_transferencia where cobro_id =?",[cobrCen.id])
@@ -128,7 +117,6 @@ class ExportadorDeDepositos{
                     case 'INSERT':
 
                     break
-
 
                     default:
                     break

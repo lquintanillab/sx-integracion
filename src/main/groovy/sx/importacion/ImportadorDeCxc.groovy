@@ -55,6 +55,7 @@ class ImportadorDeCxc{
 
           sql.rows(query,[fecha]).each { audit ->
 
+            try{
               println "***  Importando desde: ${server.server} *****************************************************************  CFDI   ${audit.id} "+fecha
               println "***  Importando desde: ${server.server} *****************************************************************  CFDI   ${audit.id} "+fecha
               println "***  Importando desde: ${server.server} *****************************************************************  CFDI   ${audit.id} "+fecha
@@ -245,7 +246,10 @@ class ImportadorDeCxc{
 
                   }
               }
-
+            //Termina Try
+          }catch(Exception e){
+            e.printStackTrace()
+          }
 
           }
 
