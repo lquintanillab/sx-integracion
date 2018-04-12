@@ -22,6 +22,5 @@ class ImportadorDeFichasJob {
         e.printStackTrace()
       }
 
-
     }
 }

@@ -75,18 +75,20 @@ class ImportadorDeRecepcionDeCompras {
 
         if(entradaCen){
           println "EL registro de entrada ya fue importado Solo actualizar"
-          //  sqlCen.executeUpdate(entradaSuc, config.updateSql)
+            sqlCen.executeUpdate(entradaSuc, config.updateSql)
         }else{
-          println "El registro de entrada no ha sido importado se debe importar"
+          println "El registro de entrada no ha sido importado se debe importar  "+entradaSuc.id
 
-        //  SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("recepcion_de_compra_det")
-        //  def res=insert.execute(entradaSuc)
+          SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("recepcion_de_compra")
+          def res=insert.execute(entradaSuc)
         }
 
-        def queryPartidas="Select * from recepcion_de_compra_det where recepcion_de_compra_id=?"
+        def queryPartidas="Select * from recepcion_de_compra_det where recepcion_id=?"
         def partidas=sqlSuc.rows(queryPartidas,[entradaSuc.id])
 
             partidas.each{partidaSuc ->
+
+                println "Partida  "+partidaSuc.id
 
               def queryPartidaCen="Select * from recepcion_de_compra_det where id=?"
               def partidaCen=sqlCen.firstRow(queryPartidaCen,[partidaSuc.id])
@@ -100,10 +102,10 @@ class ImportadorDeRecepcionDeCompras {
                   def inventarioCen=sqlCen.firstRow(queryInv,[partidaSuc.inventario_id])
 
                   if(inventarioCen){
-                      //sqlCen.executeUpdate(inventarioSuc, configInv.updateSql)
+                      sqlCen.executeUpdate(inventarioSuc, configInv.updateSql)
                   }else{
-                    //SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("inventario")
-                    //def res=insert.execute(inventarioSuc)
+                    SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("inventario")
+                    def res=insert.execute(inventarioSuc)
                   }
 
 
@@ -111,11 +113,11 @@ class ImportadorDeRecepcionDeCompras {
 
               if(partidaCen){
                 println "EL registro de partida ya fue importado Solo actualizar"
-                //sqlCen.executeUpdate(partidaSuc, configDet.updateSql)
+                sqlCen.executeUpdate(partidaSuc, configDet.updateSql)
               }else{
                 println "El registro de partida no ha sido importado se debe importar"
-                //SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("compra_det")
-                //def res=insert.execute(partidaSuc)
+                SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("recepcion_de_compra_det")
+                def res=insert.execute(partidaSuc)
               }
 
 

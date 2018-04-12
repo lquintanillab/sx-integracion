@@ -32,6 +32,5 @@ def sincronizacionService
       }
 
 
-
     }
 }

@@ -33,7 +33,6 @@ class ExportadorDeVales{
         def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
         servers.each{server ->
-
           exportarServer(server)
         }
   }

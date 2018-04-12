@@ -10,7 +10,7 @@ class ExportadorDeAndradeJob {
   def exportadorDeTraslados
 
     static triggers = {
-      cron name:   'expAndrade',   startDelay: 20000, cronExpression: '0 0/5 * * * ?'
+      cron name:   'expAndrade',   startDelay: 10000, cronExpression: '0 0/5 * * * ?'
     }
 
     def execute() {

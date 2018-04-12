@@ -63,10 +63,12 @@ class ExportadorDeTraslados{
           def trdCen=sqlCen.firstRow(queryId,[audit.persisted_object_id])
 
           if(trdCen || audit.event_name=='DELETE'){
-              try{
+      //        try{
 
                 switch(audit.event_name) {
                   case 'INSERT':
+
+                  println "---------------"+audit.persisted_object_id+"     -----------------    "
                   SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
                   def res=insert.execute(trdCen)
 
@@ -81,17 +83,17 @@ class ExportadorDeTraslados{
                   }
                   break
                   case 'UPDATE':
-                      int updated=sqlSuc.executeUpdate(trdCen, config.updateSql)
+                      //int updated=sqlSuc.executeUpdate(trdCen, config.updateSql)
                       println "************************************"
                       def partidasCen=sqlCen.rows("select * from traslado_det where traslado_id=?",[trdCen.id])
                       partidasCen.each{ detalle ->
-                          sqlSuc.executeUpdate(detalle, configDet.updateSql)
+                          //sqlSuc.executeUpdate(detalle, configDet.updateSql)
                       }
                       if(updated){
                           println "Se actualizo el registro se va a crear auditLog"
-                          sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ACTUALIZADO: ",audit.id])
+                        //  sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ACTUALIZADO: ",audit.id])
                       }else{
-                          sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["REVISAR ",audit.id])
+                        //  sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["REVISAR ",audit.id])
                       }
 
                   break
@@ -103,7 +105,7 @@ class ExportadorDeTraslados{
                   break
                 }
 
-              }
+        /*      }
               catch (DuplicateKeyException dk) {
                        println dk.getMessage()
                    //    println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
@@ -115,7 +117,7 @@ class ExportadorDeTraslados{
 
                        sqlSuc.execute("UPDATE AUDIT_LOG SET MESSAGE=?,DATE_REPLICATED=null WHERE ID=? ", [err,audit.id])
                    }
-
+*/
           }
 
     }
