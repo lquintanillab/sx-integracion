@@ -77,7 +77,7 @@ class ExportadorDeTraslados{
                       def res=insert.execute(trdCen)
                     }
 
-                  def partidasCen=sqlCen.rows("select * traslado_det where traslado_id=?",[solCen.id])
+                  def partidasCen=sqlCen.rows("select * traslado_det where traslado_id=?",[trdCen.id])
                   partidasCen.each{ detalle ->
 
                     def detalleSuc=sqlSuc.firstRow("select * traslado_det where id=?",[detalle.id])
