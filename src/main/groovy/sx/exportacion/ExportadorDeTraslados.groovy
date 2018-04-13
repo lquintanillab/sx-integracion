@@ -70,18 +70,27 @@ class ExportadorDeTraslados{
                   case 'INSERT':
                     println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++INSERT    "+trdCen.id
 
-                  SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
-                  def res=insert.execute(trdCen)
+                    def trdSuc=sqlSuc.firstRow(queryId,[trdCen.id])
+
+                    if(!trdSuc){
+                      SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
+                      def res=insert.execute(trdCen)
+                    }
 
                   def partidasCen=sqlCen.rows("select * traslado_det where traslado_id=?",[solCen.id])
                   partidasCen.each{ detalle ->
+
+                    def detalleSuc=sqlSuc.firstRow("select * traslado_det where id=?",[detalle.id])
+                    if(!detalleSuc){
                       SimpleJdbcInsert insert1=new SimpleJdbcInsert(dataSourceSuc).withTableName(configDet.tableName)
                       insert1.execute(detalle)
+                    }
+
                   }
-                  if(res){
+                //  if(res){
 
                       sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
-                  }
+                //  }
                   break
                   case 'UPDATE':
                     println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++UPDATE    "+trdCen.id
