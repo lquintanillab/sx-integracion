@@ -9,7 +9,7 @@ class ExportadorDepositosJob {
     }
 
     def execute() {
-/*
+
       println "************************************************************"
       println "*                                                          *"
       println "*                    Exportando Depositos                  *"
@@ -22,6 +22,6 @@ class ExportadorDepositosJob {
       }catch (Exception e){
           e.printStackTrace()
       }
-    */  
+     
     }
 }

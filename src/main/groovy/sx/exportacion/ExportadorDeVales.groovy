@@ -66,7 +66,7 @@ class ExportadorDeVales{
         if(solCen || audit.event_name=='DELETE'){
 
 
-          //    try{
+              try{
                     switch(audit.event_name) {
                       case 'INSERT':
                       println "Insertando Vale"
@@ -99,12 +99,15 @@ class ExportadorDeVales{
                           partidasCen.each{ detalle ->
                               sqlSuc.executeUpdate(detalle, configDet.updateSql)
                           }
+                          /*
                           if(updated){
                               println "Se actualizo el registro se va a crear auditLog"
                               sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ACTUALIZADO: ",audit.id])
                           }else{
                               sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["REVISAR ",audit.id])
                           }
+*/
+                          sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ACTUALIZADO: ",audit.id])
 
                       break
                       case 'DELETE':
@@ -115,7 +118,7 @@ class ExportadorDeVales{
                       break
                     }
 
-        /*      }catch (DuplicateKeyException dk) {
+              }catch (DuplicateKeyException dk) {
                        println dk.getMessage()
                    //    println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
                        sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
@@ -126,7 +129,7 @@ class ExportadorDeVales{
 
                        sqlSuc.execute("UPDATE AUDIT_LOG SET MESSAGE=?,DATE_REPLICATED=null WHERE ID=? ", [err,audit.id])
                    }
-                   */
+
         }
     }
 

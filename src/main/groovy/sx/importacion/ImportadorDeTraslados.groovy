@@ -171,6 +171,7 @@ class ImportadorDeTraslados{
                    sqlCen.executeUpdate(detalle, configDet.updateSql)
                 }
               }
+                  sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
                     afterImportTraslados(audit,trdSuc,sqlCen)
 
                 break

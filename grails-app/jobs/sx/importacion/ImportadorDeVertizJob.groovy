@@ -8,11 +8,11 @@ class ImportadorDeVertizJob {
       def importadorDeTraslados
 
         static triggers = {
-        cron name:   'impVertiz',   startDelay: 20000, cronExpression: '0 0/5 * * * ?'
+        cron name:   'impVertiz',   startDelay: 20000, cronExpression: '0 0/4 * * * ?'
         }
 
         def execute() {
-/*
+
          println "************************************************************"
          println "*                                                          *"
          println "*                    Importando Vertiz                     *"
@@ -20,7 +20,19 @@ class ImportadorDeVertizJob {
          println "************************************************************"
 
          def sucursal = 'VERTIZ 176'
-
+         try{
+            println "importando Vales: "+sucursal
+            importadorDeVales.importarSucursal(sucursal)
+         }catch (Exception e){
+                e.printStackTrace()
+        }
+        try{
+           println "importando Traslados: "+sucursal
+           importadorDeTraslados.importarSucursal(sucursal)
+        }catch (Exception e){
+               e.printStackTrace()
+       }
+/*
          try{
            println "importando Existencias: "+sucursal
             importadorDeExistencias.importar(sucursal)
@@ -39,18 +51,7 @@ class ImportadorDeVertizJob {
        }catch (Exception e){
               e.printStackTrace()
       }
-      try{
-         println "importando Vales: "+sucursal
-         importadorDeVales.importarSucursal(sucursal)
-      }catch (Exception e){
-             e.printStackTrace()
-     }
-     try{
-        println "importando Traslados: "+sucursal
-        importadorDeTraslados.importarSucursal(sucursal)
-     }catch (Exception e){
-            e.printStackTrace()
-    }
+
 */
 
         }

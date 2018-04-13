@@ -9,11 +9,11 @@ class ImportadorDe5FebreroJob {
 
 
     static triggers = {
-    cron name:   'imp5Febrero',   startDelay: 20000, cronExpression: '0 0/5 * * * ?'
+    cron name:   'imp5Febrero',   startDelay: 20000, cronExpression: '0 0/4 * * * ?'
     }
 
     def execute() {
-/*
+
      println "************************************************************"
      println "*                                                          *"
      println "*                    Importando 5 Febrero                  *"
@@ -22,6 +22,19 @@ class ImportadorDe5FebreroJob {
 
      def sucursal = 'CF5FEBRERO'
 
+     try{
+        println "importando Vales: "+sucursal
+        importadorDeVales.importarSucursal(sucursal)
+     }catch (Exception e){
+            e.printStackTrace()
+    }
+    try{
+       println "importando Traslados: "+sucursal
+       importadorDeTraslados.importarSucursal(sucursal)
+    }catch (Exception e){
+           e.printStackTrace()
+   }
+/*
      try{
        println "importando Existencias: "+sucursal
         importadorDeExistencias.importar(sucursal)

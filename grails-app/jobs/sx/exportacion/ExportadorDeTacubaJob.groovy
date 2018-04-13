@@ -10,18 +10,29 @@ class ExportadorDeTacubaJob {
   def exportadorDeTraslados
 
     static triggers = {
-      cron name:   'expTacuba',   startDelay: 20000, cronExpression: '0 0/5 * * * ?'
+      cron name:   'expTacuba',   startDelay: 20000, cronExpression: '0 0/7 * * * ?'
     }
 
     def execute() {
-/*
+
       println "************************************************************"
       println "*                                                          *"
       println "*                    Exportando Tacuba                     *"
       println "*                                                          *"
       println "************************************************************"
       def sucursal = 'TACUBA'
+      try{
+         exportadorDeVales.exportarSucursal(sucursal)
+      }catch (Exception e){
+             e.printStackTrace()
+     }
+     try{
+        exportadorDeTraslados.exportarSucursal(sucursal)
+     }catch (Exception e){
+            e.printStackTrace()
+    }
 
+/*
             try{
                exportadorDeClientesCredito.exportar(sucursal)
             }catch (Exception e){

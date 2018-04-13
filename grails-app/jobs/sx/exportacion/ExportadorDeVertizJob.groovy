@@ -10,11 +10,11 @@ class ExportadorDeVertizJob {
   def exportadorDeTraslados
 
     static triggers = {
-      cron name:   'expVertiz',   startDelay: 20000, cronExpression: '0 0/5 * * * ?'
+      cron name:   'expVertiz',   startDelay: 20000, cronExpression: '0 0/7 * * * ?'
     }
 
     def execute() {
-/*
+
       println "************************************************************"
       println "*                                                          *"
       println "*                   Ex portando Vertiz                     *"
@@ -23,6 +23,17 @@ class ExportadorDeVertizJob {
 
       def sucursal = 'VERTIZ 176'
 
+      try{
+         exportadorDeVales.exportarSucursal(sucursal)
+      }catch (Exception e){
+             e.printStackTrace()
+     }
+     try{
+        exportadorDeTraslados.exportarSucursal(sucursal)
+     }catch (Exception e){
+            e.printStackTrace()
+    }
+/*
           try{
              exportadorDeClientesCredito.exportar(sucursal)
           }catch (Exception e){
