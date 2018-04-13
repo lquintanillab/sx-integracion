@@ -80,7 +80,7 @@ class ExportadorDeTraslados{
                   def partidasCen=sqlCen.rows("select * from traslado_det where traslado_id=?",[trdCen.id])
                   partidasCen.each{ detalle ->
 
-                    def detalleSuc=sqlSuc.firstRow("select * traslado_det where id=?",[detalle.id])
+                    def detalleSuc=sqlSuc.firstRow("select * from traslado_det where id=?",[detalle.id])
                     if(!detalleSuc){
                       SimpleJdbcInsert insert1=new SimpleJdbcInsert(dataSourceSuc).withTableName(configDet.tableName)
                       insert1.execute(detalle)
