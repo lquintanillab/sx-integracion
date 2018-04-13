@@ -95,9 +95,9 @@ class ImportadorDeVales{
 
                   }
                     afterImportVales(audit,solSuc,sqlCen)
-                  if(res){
+                  //if(res){
                       sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
-                  }
+                  //}
 
 
                 break
