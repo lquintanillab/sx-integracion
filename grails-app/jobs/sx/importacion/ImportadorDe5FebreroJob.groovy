@@ -13,7 +13,7 @@ class ImportadorDe5FebreroJob {
     }
 
     def execute() {
-
+/*
      println "************************************************************"
      println "*                                                          *"
      println "*                    Importando 5 Febrero                  *"
@@ -54,6 +54,6 @@ class ImportadorDe5FebreroJob {
  }catch (Exception e){
         e.printStackTrace()
 }
-
+*/
     }
 }

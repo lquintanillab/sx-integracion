@@ -9,7 +9,7 @@ class ImportadorDeVentasCreditoJob {
     }
 
     def execute() {
-
+/*
       println "************************************************************"
       println "*                                                          *"
       println "*            Importando Ventas Credito                     *"
@@ -21,6 +21,6 @@ class ImportadorDeVentasCreditoJob {
       }catch(Exception e){
         e.printStackTrace()
       }
-
+*/
     }
 }

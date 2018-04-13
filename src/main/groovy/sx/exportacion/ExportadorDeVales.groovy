@@ -33,6 +33,8 @@ class ExportadorDeVales{
         def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
         servers.each{server ->
+
+          println "Exportando Vales para "+server.server
           exportarServer(server)
         }
   }
@@ -63,9 +65,11 @@ class ExportadorDeVales{
 
         if(solCen || audit.event_name=='DELETE'){
 
-              try{
+
+          //    try{
                     switch(audit.event_name) {
                       case 'INSERT':
+                      println "Insertando Vale"
                       SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
                       def res=insert.execute(solCen)
 
@@ -75,11 +79,14 @@ class ExportadorDeVales{
                           insert1.execute(detalle)
                       }
                       if(res){
-
                           sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
+                      }else{
+                          sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["revisar",audit.id])
                       }
                       break
+
                       case 'UPDATE':
+                          println "Actualizando Vale"
                           int updated=sqlSuc.executeUpdate(solCen, config.updateSql)
                           println "************************************"
                           def partidasCen=sqlCen.rows("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solCen.id])
@@ -102,7 +109,7 @@ class ExportadorDeVales{
                       break
                     }
 
-              }catch (DuplicateKeyException dk) {
+        /*      }catch (DuplicateKeyException dk) {
                        println dk.getMessage()
                    //    println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
                        sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
@@ -113,6 +120,7 @@ class ExportadorDeVales{
 
                        sqlSuc.execute("UPDATE AUDIT_LOG SET MESSAGE=?,DATE_REPLICATED=null WHERE ID=? ", [err,audit.id])
                    }
+                   */
         }
     }
 

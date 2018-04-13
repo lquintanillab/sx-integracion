@@ -12,7 +12,7 @@ class ImportadorDeVertizJob {
         }
 
         def execute() {
-
+/*
          println "************************************************************"
          println "*                                                          *"
          println "*                    Importando Vertiz                     *"
@@ -51,7 +51,7 @@ class ImportadorDeVertizJob {
      }catch (Exception e){
             e.printStackTrace()
     }
-
+*/
 
         }
 }

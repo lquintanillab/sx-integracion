@@ -9,7 +9,7 @@ class ImportadorDeCxcJob {
     }
 
     def execute() {
-
+/*
       println "************************************************************"
       println "*                                                          *"
       println "*              Importador De CuentaPorCobrar               *"
@@ -22,6 +22,6 @@ class ImportadorDeCxcJob {
         e.printStackTrace()
       }
 
-
+*/
     }
 }

@@ -9,7 +9,7 @@ class ImportadorExistenciasJob {
     }
 
     def execute() {
-
+/*
       println "************************************************************"
       println "*                                                          *"
       println "*                    Importando Existencia                 *"
@@ -21,6 +21,6 @@ class ImportadorExistenciasJob {
       }catch(Exception e){
         e.printStackTrace()
       }
-
+*/
     }
 }

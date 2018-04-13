@@ -63,12 +63,13 @@ class ExportadorDeTraslados{
           def trdCen=sqlCen.firstRow(queryId,[audit.persisted_object_id])
 
           if(trdCen || audit.event_name=='DELETE'){
-      //        try{
-
+          //    try{
+      println "---------------"+audit.persisted_object_id+"     -----------------    "
+      println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"+trdCen.id
                 switch(audit.event_name) {
                   case 'INSERT':
+                    println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++INSERT    "+trdCen.id
 
-                  println "---------------"+audit.persisted_object_id+"     -----------------    "
                   SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
                   def res=insert.execute(trdCen)
 
@@ -83,6 +84,7 @@ class ExportadorDeTraslados{
                   }
                   break
                   case 'UPDATE':
+                    println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++UPDATE    "+trdCen.id
                       //int updated=sqlSuc.executeUpdate(trdCen, config.updateSql)
                       println "************************************"
                       def partidasCen=sqlCen.rows("select * from traslado_det where traslado_id=?",[trdCen.id])
@@ -105,8 +107,8 @@ class ExportadorDeTraslados{
                   break
                 }
 
-        /*      }
-              catch (DuplicateKeyException dk) {
+    /*           }
+            catch (DuplicateKeyException dk) {
                        println dk.getMessage()
                    //    println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
                        sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])

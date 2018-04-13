@@ -10,7 +10,7 @@ def sincronizacionService
 
     def execute() {
 
-
+/*
       println "************************************************************"
       println "*                                                          *"
       println "*                    Ajustando Replica                     *"
@@ -30,7 +30,7 @@ def sincronizacionService
       }catch (Exception e){
           e.printStackTrace()
       }
-
+*/
 
     }
 }

@@ -12,7 +12,7 @@ class ImportadorDeSolisJob {
       }
 
       def execute() {
-
+/*
        println "************************************************************"
        println "*                                                          *"
        println "*                    Importando Solis                      *"
@@ -51,6 +51,6 @@ class ImportadorDeSolisJob {
    }catch (Exception e){
           e.printStackTrace()
   }
-
+*/
       }
 }

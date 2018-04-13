@@ -14,7 +14,7 @@ class ExportadorDeBolivarJob {
     }
 
     def execute() {
-
+/*
       println "************************************************************"
       println "*                                                          *"
       println "*                    Exportando Bolivar                    *"
@@ -52,7 +52,7 @@ class ExportadorDeBolivarJob {
        }catch (Exception e){
               e.printStackTrace()
       }
-
+*/
     }
 
 }

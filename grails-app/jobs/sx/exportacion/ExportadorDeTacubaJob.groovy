@@ -14,7 +14,7 @@ class ExportadorDeTacubaJob {
     }
 
     def execute() {
-
+/*
       println "************************************************************"
       println "*                                                          *"
       println "*                    Exportando Tacuba                     *"
@@ -52,6 +52,6 @@ class ExportadorDeTacubaJob {
          }catch (Exception e){
                 e.printStackTrace()
         }
-
+*/
     }
 }

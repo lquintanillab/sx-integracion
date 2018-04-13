@@ -14,7 +14,7 @@ class ExportadorDeVertizJob {
     }
 
     def execute() {
-
+/*
       println "************************************************************"
       println "*                                                          *"
       println "*                   Ex portando Vertiz                     *"
@@ -53,6 +53,6 @@ class ExportadorDeVertizJob {
        }catch (Exception e){
               e.printStackTrace()
       }
-
+*/
     }
 }

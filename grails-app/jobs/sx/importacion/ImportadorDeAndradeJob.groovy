@@ -12,7 +12,7 @@ class ImportadorDeAndradeJob {
       }
 
       def execute() {
-
+/*
        println "************************************************************"
        println "*                                                          *"
        println "*                    Importando Andrade                    *"
@@ -52,6 +52,6 @@ class ImportadorDeAndradeJob {
                e.printStackTrace()
        }
 
-
+*/
       }
 }

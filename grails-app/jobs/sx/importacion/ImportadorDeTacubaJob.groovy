@@ -12,7 +12,7 @@ class ImportadorDeTacubaJob {
         }
 
         def execute() {
-
+/*
          println "************************************************************"
          println "*                                                          *"
          println "*                    Importando Tacuba                     *"
@@ -51,6 +51,6 @@ class ImportadorDeTacubaJob {
      }catch (Exception e){
             e.printStackTrace()
     }
-
+*/
         }
 }

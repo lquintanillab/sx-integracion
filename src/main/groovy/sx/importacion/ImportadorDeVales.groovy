@@ -78,17 +78,24 @@ class ImportadorDeVales{
            try{
               switch(audit.event_name) {
                 case 'INSERT':
-                  SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName(config.tableName)
-                  def res=insert.execute(solSuc)
+                  def solCen=sqlCen.firstRow(queryId,[solSuc.id])
+                  def res=null
+                  if(!solCen){
+                    SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName(config.tableName)
+                     res=insert.execute(solSuc)
+                  }
 
                   def partidasSuc=sqlSuc.rows("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solSuc.id])
                   partidasSuc.each{ detalle ->
-                      SimpleJdbcInsert insert1=new SimpleJdbcInsert(dataSource).withTableName(configDet.tableName)
-                      insert1.execute(detalle)
-                  }
-                  afterImportVales(audit,solSuc,sqlCen)
-                  if(res){
+                    def partidaCen=sqlCen.firstRow("select * from solicitud_de_traslado_det where id=?",[detalle.id])
+                     if(!partidaCen){
+                       SimpleJdbcInsert insert1=new SimpleJdbcInsert(dataSource).withTableName(configDet.tableName)
+                       insert1.execute(detalle)
+                     }
 
+                  }
+                    afterImportVales(audit,solSuc,sqlCen)
+                  if(res){
                       sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
                   }
 
