@@ -70,19 +70,25 @@ class ExportadorDeVales{
                     switch(audit.event_name) {
                       case 'INSERT':
                       println "Insertando Vale"
-                      SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
-                      def res=insert.execute(solCen)
-
+                      def solSuc=sqlSuc.firstRow(queryId,[solCen.id])
+                      if(!solSuc){
+                        SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
+                        def res=insert.execute(solCen)
+                      }
                       def partidasCen=sqlCen.rows("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solCen.id])
                       partidasCen.each{ detalle ->
-                          SimpleJdbcInsert insert1=new SimpleJdbcInsert(dataSourceSuc).withTableName(configDet.tableName)
-                          insert1.execute(detalle)
+                          def partidaSuc=sqlSuc.firstRow("select * from solicitud_de_traslado_det where id=?",[detalle.id])
+                          if(!partidaCen){
+                            SimpleJdbcInsert insert1=new SimpleJdbcInsert(dataSourceSuc).withTableName(configDet.tableName)
+                            insert1.execute(detalle)
+                          }
+
                       }
-                      if(res){
+                    //  if(res){
                           sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
-                      }else{
+                  /*    }else{
                           sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["revisar",audit.id])
-                      }
+                      }*/
                       break
 
                       case 'UPDATE':
