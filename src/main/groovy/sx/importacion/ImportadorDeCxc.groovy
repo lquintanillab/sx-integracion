@@ -51,7 +51,7 @@ class ImportadorDeCxc{
 
           def sql=new Sql(datasourceOrigen)
 
-          def query="Select * from cfdi where tipo_de_comprobante='I' and date(date_created)=? and serie like '%%CRE' "
+          def query="Select * from cfdi where tipo_de_comprobante='I' and date(date_created)=?  "
 
           sql.rows(query,[fecha]).each { audit ->
 
