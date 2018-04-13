@@ -62,7 +62,7 @@ class ImportadorDeTraslados{
       def configCfdi= EntityConfiguration.findByName("Cfdi")
       def configInv= EntityConfiguration.findByName("Inventario")
 
-      def queryAuditLog="Select * from audit_log where date_replicated is null and name='Traslado' and date(date_created)>='2018/04/06'"
+      def queryAuditLog="Select * from audit_log where date_replicated is null and name='Traslado'"
 
       def audits=sqlSuc.rows(queryAuditLog)
 
@@ -122,7 +122,7 @@ class ImportadorDeTraslados{
                 }
                       afterImportTraslados(audit,trdSuc,sqlCen)
 
-
+                        sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
                 break
                 case 'UPDATE':
 
