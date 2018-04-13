@@ -52,9 +52,9 @@ class ExportadorDeTraslados{
     def config= EntityConfiguration.findByName("Traslado")
     def configDet= EntityConfiguration.findByName("TrasladoDet")
 
-    def queryAuditLog="Select * from audit_log where date_replicated is null and name='Traslado'"
+    def queryAuditLog="Select * from audit_log where date_replicated is null and name='Traslado' and target=?"
 
-    def audits=sqlCen.rows(queryAuditLog)
+    def audits=sqlCen.rows(queryAuditLog,[server.server])
 
     def queryId="select * from traslado  where id=?"
 
