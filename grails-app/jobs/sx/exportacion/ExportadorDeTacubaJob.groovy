@@ -32,37 +32,5 @@ class ExportadorDeTacubaJob {
             e.printStackTrace()
     }
 
-/*
-            try{
-               exportadorDeClientesCredito.exportar(sucursal)
-            }catch (Exception e){
-                   e.printStackTrace()
-           }
-           try{
-              exportadorDeClientes.exportar(sucursal)
-           }catch (Exception e){
-                  e.printStackTrace()
-            }
-            try{
-               exportadorDeProductos.exportar(sucursal)
-            }catch (Exception e){
-                   e.printStackTrace()
-           }
-           try{
-              exportadorDeExistencia.exportar(sucursal)
-           }catch (Exception e){
-                  e.printStackTrace()
-          }
-          try{
-             exportadorDeVales.exportarSucursal(sucursal)
-          }catch (Exception e){
-                 e.printStackTrace()
-         }
-         try{
-            exportadorDeTraslados.exportarSucursal(sucursal)
-         }catch (Exception e){
-                e.printStackTrace()
-        }
-*/
     }
 }

@@ -143,7 +143,7 @@ class ImportadorDeTraslados{
                           sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
                       }
                   }else{
-                    def res=sqlSuc.executeUpdate(trdSuc, config.updateSql)
+                    def res=sqlCen.executeUpdate(trdSuc, config.updateSql)
                      if(res){
                          sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
                      }

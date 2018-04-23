@@ -1,37 +1,46 @@
 package sx.importacion
 
-class ImportadorDeCalle4Job {
+class Importador5FebreroJob {
 
     def importadorDeExistencias
     def importadorDeClientes
     def importadorDeVales
     def importadorDeTraslados
 
+
       static triggers = {
-      cron name:   'impCalle4',   startDelay: 20000, cronExpression: '0 0/4 * * * ?'
+      cron name:   'imp5Febrero2',   startDelay: 20000, cronExpression: '0 0/5 * * * ?'
       }
 
       def execute() {
 
        println "************************************************************"
        println "*                                                          *"
-       println "*                    Importando Calle 4                    *"
+       println "*                    Importando 5 Febrero Dos              *"
        println "*                                                          *"
        println "************************************************************"
 
-       def sucursal = 'CALLE 4'
+       def sucursal = 'CF5FEBRERO'
+
        try{
-          println "importando Vales: "+sucursal
-          importadorDeVales.importarSucursal(sucursal)
+         println "importando Existencias: "+sucursal
+          importadorDeExistencias.importar(sucursal)
        }catch (Exception e){
               e.printStackTrace()
       }
+
       try{
-         println "importando Traslados: "+sucursal
-         importadorDeTraslados.importarSucursal(sucursal)
+         println "importando Clientes: "+sucursal
+         importadorDeClientes.importar(sucursal)
       }catch (Exception e){
              e.printStackTrace()
      }
+     try{
+        println "importando ComunicacionEmpresa: "+sucursal
+        importadorDeClientes.importarComunicacionEmpresa(sucursal)
+     }catch (Exception e){
+            e.printStackTrace()
+    }
 
       }
 }
