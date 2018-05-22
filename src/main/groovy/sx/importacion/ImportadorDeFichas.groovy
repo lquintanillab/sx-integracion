@@ -26,7 +26,7 @@ class ImportadorDeFichas{
           importar(new Date())
       }
       def importar(fecha){
-        println ("Importando Fichas del : ${fecha.format('dd/MM/yyyy')}" )
+    //    println ("Importando Fichas del : ${fecha.format('dd/MM/yyyy')}" )
 
         def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
@@ -34,7 +34,7 @@ class ImportadorDeFichas{
 
           servers.each(){server ->
 
-            println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
+    //        println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
             importarServerFecha(server,fecha)
           }
       }
@@ -44,14 +44,14 @@ class ImportadorDeFichas{
 
         def server=DataSourceReplica.findByServer(nombreSuc)
 
-        println "Importando Fichas nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server} "
+    //    println "Importando Fichas nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server} "
 
       importarServerFecha(server,fecha)
 
       }
 
       def importarServerFecha(server,fecha){
-        println "Importando Por Server Fecha de Fichas  "
+  //      println "Importando Por Server Fecha de Fichas  "
         def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
         def sqlSuc=new Sql(dataSourceSuc)
         def sqlCen=new Sql(dataSource)
@@ -66,11 +66,11 @@ class ImportadorDeFichas{
             def found=sqlCen.firstRow(queryId,[row.id])
 
             if(found){
-               println "EL registro ya fue importado Solo actualizar"
+        //       println "EL registro ya fue importado Solo actualizar"
               sqlCen.executeUpdate(row, config.updateSql)
 
             }else{
-               println "El registro no ha sido importado se debe importar"
+        //       println "El registro no ha sido importado se debe importar"
               SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("ficha")
                def res=insert.execute(row)
             }

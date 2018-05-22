@@ -29,14 +29,14 @@ class ImportadorDeCompras {
     }
 
     def importar(fecha){
-      println ("Importando Compras del : ${fecha.format('dd/MM/yyyy')}" )
+      //println ("Importando Compras del : ${fecha.format('dd/MM/yyyy')}" )
 
       def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
         def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
         servers.each(){server ->
-          println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
+        //  println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
           importarServerFecha(server,fecha)
         }
     }
@@ -47,7 +47,7 @@ class ImportadorDeCompras {
 
       def server=DataSourceReplica.findByServer(nombreSuc)
 
-      println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server} "
+    //  println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server} "
 
       importarServerFecha(server,fecha)
 
@@ -55,7 +55,7 @@ class ImportadorDeCompras {
 
     def importarServerFecha(server,fecha){
 
-      println "Importando Por Server Fecha"+fecha.format('yyyy/MM/dd')
+    //  println "Importando Por Server Fecha"+fecha.format('yyyy/MM/dd')
       def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
       def sqlSuc=new Sql(dataSourceSuc)
       def sqlCen=new Sql(dataSource)
@@ -71,13 +71,13 @@ class ImportadorDeCompras {
 
       compras.each{ compraSuc ->
 
-        println compraSuc
+    //    println compraSuc
 
         def queryCen="Select * from compra where id=?"
         def compraCen=sqlCen.firstRow(queryCen,[compraSuc.id])
 
             if(!compraCen){
-              println "El registro de compra no ha sido importado se debe importar"
+        //      println "El registro de compra no ha sido importado se debe importar"
               SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("compra")
               def res=insert.execute(compraSuc)
             }
@@ -91,7 +91,7 @@ class ImportadorDeCompras {
                   def partidaCen=sqlCen.firstRow(queryPartidaCen,[partidaSuc.id])
 
                   if(!partidaCen){
-                    println "El registro de partida no ha sido importado se debe importar"
+            //        println "El registro de partida no ha sido importado se debe importar"
                     SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("compra_det")
                     def res=insert.execute(partidaSuc)
                   }

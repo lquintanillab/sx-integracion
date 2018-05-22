@@ -12,7 +12,7 @@ class ImportadorDeFichasJob {
 
       println "************************************************************"
       println "*                                                          *"
-      println "*                    Importador De Fichas                  *"
+      println "*                    Importador De Fichas        ${new Date()}  "
       println "*                                                          *"
       println "************************************************************"
 

@@ -29,14 +29,14 @@ class ImportadorDeTraslados{
 
   def importar(){
 
-    println ("Importando Traslados" )
+  //  println ("Importando Traslados" )
 
     def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
       def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
       servers.each{server ->
-            println ("Importando Traslados"+server.server+"*************"+server.url )
+    //        println ("Importando Traslados"+server.server+"*************"+server.url )
         importarServer(server)
       }
 
@@ -50,7 +50,7 @@ class ImportadorDeTraslados{
 
     def importarServer(server){
 
-      println ("Importando Traslados"+server.server+"----------------"+server.url )
+  //    println ("Importando Traslados"+server.server+"----------------"+server.url )
 
       def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
 
@@ -72,8 +72,8 @@ class ImportadorDeTraslados{
 
       audits.each{ audit ->
 
-           println ("Importando ************-*-*-**-*-*-*-**-*-*-**-*-*-*-*-*--*-**-* " )
-           println audit
+      //     println ("Importando ************-*-*-**-*-*-*-**-*-*-**-*-*-*-*-*--*-**-* " )
+      //     println audit
 
           def trdSuc=sqlSuc.firstRow(queryId,[audit.persisted_object_id])
 
@@ -99,11 +99,11 @@ class ImportadorDeTraslados{
                             sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
                         }
                     }
-                      println "-------------------------"+trdSuc
+              //        println "-------------------------"+trdSuc
 
                 def partidasSuc=sqlSuc.rows("select * from traslado_det where traslado_id=?",[trdSuc.id])
                 partidasSuc.each{ detalle ->
-                  println "***********************"+detalle
+            //      println "***********************"+detalle
                   if(detalle.inventario_id){
                     def queryInv="Select * from Inventario where id=?"
                     def invSuc=sqlSuc.firstRow(queryInv,[detalle.inventario_id])
@@ -148,11 +148,11 @@ class ImportadorDeTraslados{
                          sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
                      }
                   }
-                    println "-------------------------"+trdSuc
+              //      println "-------------------------"+trdSuc
 
               def partidasSuc=sqlSuc.rows("select * from traslado_det where traslado_id=?",[trdSuc.id])
               partidasSuc.each{ detalle ->
-                println "***********************"+detalle
+          //      println "***********************"+detalle
                 if(detalle.inventario_id){
                   def queryInv="Select * from Inventario where id=?"
                   def invSuc=sqlSuc.firstRow(queryInv,[detalle.inventario_id])

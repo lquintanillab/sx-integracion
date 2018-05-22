@@ -25,16 +25,16 @@ class ImportadorDeCobros{
       def importar(){
           importar(new Date())
       }
-      
+
       def importar(fecha){
-        println ("Importando Cobros del : ${fecha.format('dd/MM/yyyy')}" )
+      //  println ("Importando Cobros del : ${fecha.format('dd/MM/yyyy')}" )
 
         def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
           def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
           servers.each(){server ->
-            println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
+        //    println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
             importarServerFecha(server,fecha)
           }
       }
@@ -44,14 +44,14 @@ class ImportadorDeCobros{
 
         def server=DataSourceReplica.findByServer(nombreSuc)
 
-        println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server} "
+      //  println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server} "
 
       importarServerFecha(server,fecha)
 
       }
 
       def importarServerFecha(server,fecha){
-        println "Importando Por Server Fecha"
+      //  println "Importando Por Server Fecha"
         def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
         def sqlSuc=new Sql(dataSourceSuc)
         def sqlCen=new Sql(dataSource)
@@ -66,11 +66,11 @@ class ImportadorDeCobros{
             def found=sqlCen.firstRow(queryId,[row.id])
 
             if(found){
-               println "EL registro ya fue importado Solo actualizar"
+          //     println "EL registro ya fue importado Solo actualizar"
               sqlCen.executeUpdate(row, config.updateSql)
 
             }else{
-               println "El registro no ha sido importado se debe importar"
+          //     println "El registro no ha sido importado se debe importar"
               SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("cobro")
                def res=insert.execute(row)
             }
@@ -84,11 +84,11 @@ class ImportadorDeCobros{
                 def cheque=sqlSuc.firstRow(queryChe,[row.id])
                 def foundChe=sqlCen.firstRow(queryCheCen,cheque.id)
                 if(foundChe){
-                   println "EL registro del cheque ya fue importado Solo actualizar"
+                //   println "EL registro del cheque ya fue importado Solo actualizar"
                   sqlCen.executeUpdate(cheque, configChe.updateSql)
 
                 }else{
-                   println "El registro del cheque no ha sido importado se debe importar"
+                //   println "El registro del cheque no ha sido importado se debe importar"
                   SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("cobro_cheque")
                    def res=insert.execute(cheque)
                 }
@@ -104,11 +104,11 @@ class ImportadorDeCobros{
               def tarjeta=sqlSuc.firstRow(queryTar,[row.id])
               def foundTar=sqlCen.firstRow(queryTarCen,tarjeta.id)
               if(foundTar){
-                 println "EL registro de la tarjeta ya fue importado Solo actualizar"
+              //   println "EL registro de la tarjeta ya fue importado Solo actualizar"
                 sqlCen.executeUpdate(tarjeta, configTar.updateSql)
 
               }else{
-                 println "El registro de la tarjeta no ha sido importado se debe importar"
+              //   println "El registro de la tarjeta no ha sido importado se debe importar"
                 SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("cobro_tarjeta")
                  def res=insert.execute(tarjeta)
               }

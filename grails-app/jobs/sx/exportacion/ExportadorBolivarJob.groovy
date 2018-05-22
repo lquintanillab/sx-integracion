@@ -17,7 +17,7 @@ class ExportadorBolivarJob {
 
         println "************************************************************"
         println "*                                                          *"
-        println "*                    Exportando Bolivar Dos                *"
+        println "*                    Exportando Bolivar Dos  ${new Date()}              *"
         println "*                                                          *"
         println "************************************************************"
         def sucursal = 'BOLIVAR'
@@ -42,5 +42,6 @@ class ExportadorBolivarJob {
            }catch (Exception e){
                   e.printStackTrace()
           }
+
       }
 }

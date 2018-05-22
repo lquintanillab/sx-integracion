@@ -12,7 +12,7 @@ def importadorDeDevoluciones
 
       println "************************************************************"
       println "*                                                          *"
-      println "*                    Importando Devoluciones               *"
+      println "*                    Importando Devoluciones     ${new Date()}  "
       println "*                                                          *"
       println "************************************************************"
 

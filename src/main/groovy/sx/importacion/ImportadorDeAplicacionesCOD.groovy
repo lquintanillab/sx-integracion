@@ -24,14 +24,14 @@ class ImportadorDeAplicacionesCOD{
 
 
       def importar(){
-        println ("Importando Cobros  " )
+      //  println ("Importando Cobros  " )
 
         def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
           def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
           servers.each(){server ->
-            println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
+        //    println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
             importarServer(server)
           }
       }
@@ -40,14 +40,16 @@ class ImportadorDeAplicacionesCOD{
 
         def server=DataSourceReplica.findByServer(nombreSuc)
 
-        println "nombre: ${nombreSuc}  URL: ${server} "
+      //  println "nombre: ${nombreSuc}  URL: ${server} "
 
       importarServer(server)
 
       }
 
       def importarServer(server){
-        println "Importando Por Server"
+
+    //    println "Importando Por Server"
+
         def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
         def sqlSuc=new Sql(dataSourceSuc)
         def sqlCen=new Sql(dataSource)
@@ -68,20 +70,20 @@ class ImportadorDeAplicacionesCOD{
             def aplCen= sqlCen.firstRow(queryApl,[aplSuc.id])
 
             if(aplCen){
-               println "la aplicacion ya existe"
+              // println "la aplicacion ya existe"
                sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE PERSISTED_OBJECT_ID=? ", ["Registro ya existente",row.id])
             }else{
-                println "la aplicacion no existe"
+              //  println "la aplicacion no existe"
 
                 def queryCobro="Select * from cobro where id=?"
                 def cobroCen=sqlCen.firstRow(queryCobro,[aplSuc.cobro_id])
                 def cobroSuc=sqlSuc.firstRow(queryCobro,[aplSuc.cobro_id])
                 if(cobroCen){
 
-                   println "El cobro ya existe"
+                //   println "El cobro ya existe"
                    sqlCen.executeUpdate(cobroSuc, configCobro.updateSql)
                 }else{
-                   println "El cobro NO existe"
+                //   println "El cobro NO existe"
 
                     SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("cobro")
                      def res=insert.execute(cobroSuc)
@@ -93,9 +95,9 @@ class ImportadorDeAplicacionesCOD{
                 def cfdiCen=sqlCen.firstRow(queryCfdi,aplSuc.cuenta_por_cobrar_id)
 
                 if(cfdiCen){
-                   println "El cfdi ya existe"
+                //   println "El cfdi ya existe"
                 }else{
-                   println "El cfdi no existe"
+                //   println "El cfdi no existe"
                    def cfdiSuc=sqlSuc.firstRow(queryCfdi,aplSuc.cuenta_por_cobrar_id)
                      SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("cfdi")
                      def res=insert.execute(cfdiSuc)
@@ -107,9 +109,9 @@ class ImportadorDeAplicacionesCOD{
                 def cxcCen=sqlCen.firstRow(queryCxc,aplSuc.cuenta_por_cobrar_id)
 
                 if(cxcCen){
-                   println "El cxc ya existe"
+                  // println "El cxc ya existe"
                 }else{
-                   println "El cxc no existe"
+                //   println "El cxc no existe"
                    def cxcSuc=sqlSuc.firstRow(queryCxc,aplSuc.cuenta_por_cobrar_id)
                      SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("cuenta_por_cobrar")
                      def res=insert.execute(cxcSuc)

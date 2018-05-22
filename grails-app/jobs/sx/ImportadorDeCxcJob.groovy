@@ -12,7 +12,7 @@ class ImportadorDeCxcJob {
 
       println "************************************************************"
       println "*                                                          *"
-      println "*              Importador De CuentaPorCobrar               *"
+      println "*              Importador De CuentaPorCobrar  ${new Date()}  "
       println "*                                                          *"
       println "************************************************************"
 
@@ -21,7 +21,6 @@ class ImportadorDeCxcJob {
       }catch(Exception e){
         e.printStackTrace()
       }
-
 
     }
 }

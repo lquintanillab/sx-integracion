@@ -28,14 +28,14 @@ class ImportadorDeRecepcionDeCompras {
     }
 
     def importar(fecha){
-      println ("Importando Compras del : ${fecha.format('dd/MM/yyyy')}" )
+    //  println ("Importando Compras del : ${fecha.format('dd/MM/yyyy')}" )
 
       def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
         def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
         servers.each(){server ->
-          println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
+      //    println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
           importarServerFecha(server,fecha)
         }
     }
@@ -46,7 +46,7 @@ class ImportadorDeRecepcionDeCompras {
 
       def server=DataSourceReplica.findByServer(nombreSuc)
 
-      println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server} "
+  //    println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server} "
 
       importarServerFecha(server,fecha)
 
@@ -54,7 +54,7 @@ class ImportadorDeRecepcionDeCompras {
 
     def importarServerFecha(server,fecha){
 
-      println "Importando Por Server Fecha"+fecha.format('yyyy/MM/dd')
+  //    println "Importando Por Server Fecha"+fecha.format('yyyy/MM/dd')
 
     }
 

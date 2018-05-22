@@ -17,7 +17,7 @@ class ExportadorSolisJob {
 
         println "************************************************************"
         println "*                                                          *"
-        println "*                    Exportando Solis Dos                  *"
+        println "*                    Exportando Solis Dos    ${new Date()}               *"
         println "*                                                          *"
         println "************************************************************"
 

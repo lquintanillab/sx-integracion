@@ -16,27 +16,27 @@ class Importador5FebreroJob {
 
        println "************************************************************"
        println "*                                                          *"
-       println "*                    Importando 5 Febrero Dos              *"
+       println "*                    Importando 5 Febrero Dos   ${new Date()}            *"
        println "*                                                          *"
        println "************************************************************"
 
        def sucursal = 'CF5FEBRERO'
 
        try{
-         println "importando Existencias: "+sucursal
+         //println "importando Existencias: "+sucursal
           importadorDeExistencias.importar(sucursal)
        }catch (Exception e){
               e.printStackTrace()
       }
 
       try{
-         println "importando Clientes: "+sucursal
+        // println "importando Clientes: "+sucursal
          importadorDeClientes.importar(sucursal)
       }catch (Exception e){
              e.printStackTrace()
      }
      try{
-        println "importando ComunicacionEmpresa: "+sucursal
+    //    println "importando ComunicacionEmpresa: "+sucursal
         importadorDeClientes.importarComunicacionEmpresa(sucursal)
      }catch (Exception e){
             e.printStackTrace()

@@ -17,7 +17,7 @@ class ExportadorCalle4Job {
 
         println "************************************************************"
         println "*                                                          *"
-        println "*                    Exportando Calle 4 Dos                *"
+        println "*                    Exportando Calle 4 Dos  ${new Date()}              *"
         println "*                                                          *"
         println "************************************************************"
         def sucursal = 'CALLE 4'
@@ -42,5 +42,6 @@ class ExportadorCalle4Job {
              }catch (Exception e){
                     e.printStackTrace()
             }
+
       }
 }

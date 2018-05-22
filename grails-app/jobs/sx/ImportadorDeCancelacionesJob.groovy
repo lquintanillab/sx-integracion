@@ -1,11 +1,23 @@
 package sx
 
 class ImportadorDeCancelacionesJob {
+
+  def importadorDeCancelaciones
     static triggers = {
-      simple repeatInterval: 5000l // execute job once in 5 seconds
+        cron name:   'impCanc',   startDelay: 10000, cronExpression: '0 15 19 * * ?'
     }
 
     def execute() {
-        // execute job
+      println "************************************************************"
+      println "*                                                          *"
+      println "*                    Importador De Cancelaciones     ${new Date()}  "
+      println "*                                                          *"
+      println "************************************************************"
+
+      try{
+        importadorDeCancelaciones.importar()
+      }catch(Exception e){
+        e.printStackTrace()
+      }
     }
 }

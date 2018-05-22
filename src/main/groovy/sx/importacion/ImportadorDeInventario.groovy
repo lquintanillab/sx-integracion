@@ -29,7 +29,7 @@ class ImportadorDeInventario{
   }
 
   def importar(fecha){
-    println ("Importando OperacionesAlmacen del : ${fecha.format('dd/MM/yyyy')}" )
+  //  println ("Importando OperacionesAlmacen del : ${fecha.format('dd/MM/yyyy')}" )
 
     def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
@@ -37,7 +37,7 @@ class ImportadorDeInventario{
 
       servers.each(){server ->
 
-        println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
+//        println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
         importarServerFecha(server,fecha)
       }
   }
@@ -46,8 +46,8 @@ class ImportadorDeInventario{
   def importarSucursalFecha(nombreSuc,fecha){
 
     def server=DataSourceReplica.findByServer(nombreSuc)
-    println  "*************************************************************"
-    println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server.url} "
+//    println  "*************************************************************"
+//    println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server.url} "
 
     importarServerFecha(server,fecha)
 
@@ -57,7 +57,7 @@ class ImportadorDeInventario{
 
   //  def fecha=fecha.format('yyyy/MM/dd')
 
-    println "Importando Por Server Fecha   "+fecha+ "   "+server.server
+  //  println "Importando Por Server Fecha   "+fecha+ "   "+server.server
     def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
     def sqlSuc=new Sql(dataSourceSuc)
     def sqlCen=new Sql(dataSource)
@@ -73,12 +73,12 @@ class ImportadorDeInventario{
           def invCen=sqlCen.firstRow(queryInvId,[inventarioSuc.id])
 
           if(!invCen){
-            println "El registro de inventario no ha sido importado se debe importar"
+      //      println "El registro de inventario no ha sido importado se debe importar"
           //  SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("inventario")
           //  def res=insert.execute(inventarioSuc)
 
           }else{
-            println "EL registro de inventario ya fue importado Solo actualizar"
+    //        println "EL registro de inventario ya fue importado Solo actualizar"
             //sqlCen.executeUpdate(inventarioSuc, configInv.updateSql)
           }
             def table=""
@@ -107,13 +107,13 @@ class ImportadorDeInventario{
 
             break
           }
-            println "******************"+table
+  //          println "******************"+table
           def queryPartida="select * from ${table}_det where inventario_id=?"
 
           def partidaSuc=sqlSuc.firstRow(queryPartida,[inventarioSuc.id])
 
           if(partidaSuc){
-            println partidaSuc.partidas_idx
+    //        println partidaSuc.partidas_idx
 
             if(partidaSuc.partidas_idx == 0){
               /*Revisio  del maestro*/
@@ -128,11 +128,11 @@ class ImportadorDeInventario{
 
               def moviSuc=sqlSuc.firstRow(queryMov,[movId.id])
               if(moviSuc){
-                println "------------------------Partida"+moviSuc.id
+    //            println "------------------------Partida"+moviSuc.id
                 def moviCen=sqlCen.firstRow(queryMov,[movId.id])
 
                 if(!moviCen){
-                  println "------------------------Importar"+moviSuc.id
+    //              println "------------------------Importar"+moviSuc.id
                 //  SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("${table}")
                 //  def res=insert.execute(moviSuc)
                 }
@@ -140,12 +140,12 @@ class ImportadorDeInventario{
             }
             def partidaCen=sqlCen.firstRow(queryPartida,[inventarioSuc.id])
             if(!partidaCen){
-              println "Importando movimiento partida"+partidaSuc.id +" ---- "+ partidaSuc.inventario_id
+  //            println "Importando movimiento partida"+partidaSuc.id +" ---- "+ partidaSuc.inventario_id
 
             //SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("${table}_det")
             //    def res=insert.execute(partidaSuc)
             }else{
-              println "Actualizando movimiento partida"+partidaSuc.id +" ---- "+ partidaSuc.inventario_id
+  //            println "Actualizando movimiento partida"+partidaSuc.id +" ---- "+ partidaSuc.inventario_id
 
             }
 

@@ -7,6 +7,7 @@ class ActualizadorJob {
     }
 
     def execute() {
+
         try{
             actualizacionCredito.actualizarSaldo()
         }catch(Exception e){
@@ -17,5 +18,6 @@ class ActualizadorJob {
         }catch(Exception e){
           e.printStackTrace()
         }
+        
     }
 }

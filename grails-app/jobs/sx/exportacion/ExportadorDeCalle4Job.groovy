@@ -17,7 +17,7 @@ class ExportadorDeCalle4Job {
 
       println "************************************************************"
       println "*                                                          *"
-      println "*                    Exportando Calle 4                    *"
+      println "*                    Exportando Calle 4   ${new Date()}                  *"
       println "*                                                          *"
       println "************************************************************"
       def sucursal = 'CALLE 4'

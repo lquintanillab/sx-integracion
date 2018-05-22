@@ -37,7 +37,7 @@ class ImportadorDeVales{
 
       servers.each{server ->
 
-        println "***  Importando Vales: ${server.server} ******* ${server.url}****  "
+    //    println "***  Importando Vales: ${server.server} ******* ${server.url}****  "
         importarServer(server)
       }
 
@@ -103,7 +103,7 @@ class ImportadorDeVales{
                 break
                 case 'UPDATE':
                         int updated=sqlCen.executeUpdate(solSuc, config.updateSql)
-                        println "************************************"
+                    //    println "************************************"
                         def partidasSuc=sqlSuc.rows("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solSuc.id])
                         partidasSuc.each{ detalle ->
                             sqlCen.executeUpdate(detalle, configDet.updateSql)
@@ -130,7 +130,7 @@ class ImportadorDeVales{
 
            }
          catch (DuplicateKeyException dk) {
-                  println dk.getMessage()
+              //    println dk.getMessage()
               //    println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
                   sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
 

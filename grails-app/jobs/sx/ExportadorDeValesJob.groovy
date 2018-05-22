@@ -9,10 +9,10 @@ class ExportadorDeValesJob {
     }
 
     def execute() {
-/*
+
       println "************************************************************"
       println "*                                                          *"
-      println "*                    Exportando Vales                      *"
+      println "*                    Exportando Vales  ${new Date()}  "
       println "*                                                          *"
       println "************************************************************"
 
@@ -21,6 +21,6 @@ class ExportadorDeValesJob {
       }catch (Exception e){
           e.printStackTrace()
       }
-    */  
+
     }
 }

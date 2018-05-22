@@ -9,10 +9,10 @@ def importadorDeVales
     }
 
     def execute() {
-/*
+
         println "************************************************************"
         println "*                                                          *"
-        println "*                    Importando Vales                      *"
+        println "*                    Importando Vales     ${new Date()}  "
         println "*                                                          *"
         println "************************************************************"
 
@@ -22,6 +22,6 @@ def importadorDeVales
         }catch (Exception e){
             e.printStackTrace()
         }
-        */
+
     }
 }

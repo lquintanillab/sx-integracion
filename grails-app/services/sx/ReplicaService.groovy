@@ -116,7 +116,7 @@ class ReplicaService {
 
                         }
                         catch (DuplicateKeyException dk) {
-                            println dk.getMessage()
+                        //    println dk.getMessage()
                           //  println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
                             sql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
 
@@ -267,11 +267,11 @@ class ReplicaService {
 
       def query="Select * from audit_log where name= ${entityName} and date_replicated is null "
 
-      println "***  Exportando  Por ReplicaService: ****  "+entityName+"  ************ "+serverName
+//      println "***  Exportando  Por ReplicaService: ****  "+entityName+"  ************ "+serverName
 
         def server=DataSourceReplica.findAllByActivaAndCentralAndServer(true,false,serverName)
 
-        println "***  Exportando  Por ReplicaService: ****  "+entityName+"  ************ "+server.server
+  //      println "***  Exportando  Por ReplicaService: ****  "+entityName+"  ************ "+server.server
 
         def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
@@ -282,9 +282,9 @@ class ReplicaService {
         def dataSourceSuc=dataSourceLocatorService.dataSourceLocator(server.server)
 
         def sqlSuc=new Sql(dataSourceSuc)
-println "*** ***************************************"
+//println "*** ***************************************"
          sqlCen.rows(query+" and target='${serverName}'").each { audit ->
-println "------------------------------------------------"
+//println "------------------------------------------------"
                 def config= EntityConfiguration.findByName(audit.name)
 
                 if(config){
@@ -297,24 +297,24 @@ println "------------------------------------------------"
                             switch (audit.event_name) {
 
                                 case 'INSERT':
-                                    println 'Insertando '+row
+                                //    println 'Insertando '+row
                                     SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
                                     def res=insert.execute(row)
 
                                     if(res){
-                                        println '***************  Actualizando audit log'+audit.id
+                                    //    println '***************  Actualizando audit log'+audit.id
                                         sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
                                     }
                                     break
 
                                 case 'UPDATE':
-                                    println 'Actualizando '+row
+                            //        println 'Actualizando '+row
                                     int updated=sqlSuc.executeUpdate(row, config.updateSql)
                                     if(updated) {
-                                        println '***************  Actualizando audit log'+audit.id
+                              //          println '***************  Actualizando audit log'+audit.id
                                         sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ACTUALIZADO: ", audit.id])
                                     }else{
-                                        println '***************  No se actualizo'+audit.id
+                              //          println '***************  No se actualizo'+audit.id
                                     }
                                     break
                                 case 'DELETE':
@@ -326,7 +326,7 @@ println "------------------------------------------------"
 
                           }
                           catch (DuplicateKeyException dk) {
-                              println dk.getMessage()
+                    //          println dk.getMessage()
                             //  println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
                               sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
 

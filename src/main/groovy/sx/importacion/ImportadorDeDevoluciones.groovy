@@ -29,7 +29,7 @@ class ImportadorDeDevoluciones{
     }
 
     def importar(fecha){
-      println ("Importando Devoluciones del : ${fecha.format('dd/MM/yyyy')}" )
+    //  println ("Importando Devoluciones del : ${fecha.format('dd/MM/yyyy')}" )
 
       def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
@@ -37,7 +37,7 @@ class ImportadorDeDevoluciones{
 
         servers.each(){server ->
 
-          println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
+        //  println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
           importarServerFecha(server,fecha)
         }
     }
@@ -47,7 +47,7 @@ class ImportadorDeDevoluciones{
 
       def server=DataSourceReplica.findByServer(nombreSuc)
 
-      println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server.url} "
+    //  println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server.url} "
 
       importarServerFecha(server,fecha)
 
@@ -57,7 +57,7 @@ class ImportadorDeDevoluciones{
 
       def fecha=fechaImpo.format('yyyy/MM/dd')
 
-      println "Importando Por Server Fecha   "+fecha+ "   "+server.server
+  //    println "Importando Por Server Fecha   "+fecha+ "   "+server.server
       def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
       def sqlSuc=new Sql(dataSourceSuc)
       def sqlCen=new Sql(dataSource)
@@ -76,7 +76,7 @@ class ImportadorDeDevoluciones{
 
         devolucionesSuc.each{devoSuc ->
 
-          println "Devosuc"+ devoSuc.id
+      //    println "Devosuc"+ devoSuc.id
 
             if(devoSuc.cobro_id){
                 def queryCobro="Select * from cobro where id=?"
@@ -92,11 +92,11 @@ class ImportadorDeDevoluciones{
 
             def devoCen=sqlCen.firstRow(queryDevCen,[devoSuc.id])
             if(devoCen){
-               println "EL registro ya fue importado Solo actualizar devolucion maestro"
+        //       println "EL registro ya fue importado Solo actualizar devolucion maestro"
               sqlCen.executeUpdate(devoSuc, configDevo.updateSql)
 
             }else{
-               println "El registro no ha sido importado se debe importar devolucion maestro"
+      //         println "El registro no ha sido importado se debe importar devolucion maestro"
                importadorDeVentaDevolucion(devoSuc.id,server)
               SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("devolucion_de_venta")
                def res=insert.execute(devoSuc)
@@ -108,7 +108,7 @@ class ImportadorDeDevoluciones{
             def configDevoDet=EntityConfiguration.findByName('DevolucionDeVentaDet')
 
             partidasSuc.each{devoSucDet ->
-                println "DevosucDet"+devoSucDet.id
+      //          println "DevosucDet"+devoSucDet.id
 
                 def queryDevoDetCen="Select * from devolucion_de_venta_det where id=?"
 
@@ -123,11 +123,11 @@ class ImportadorDeDevoluciones{
                       def inventCen=sqlCen.firstRow(queryInventCen,inventSuc.id)
                       def configInvent=EntityConfiguration.findByName("Inventario")
                       if(inventCen){
-                         println "EL registro ya de inventario fue importado Solo actualizar"
+        //                 println "EL registro ya de inventario fue importado Solo actualizar"
                         sqlCen.executeUpdate(inventSuc, configInvent.updateSql)
 
                       }else{
-                         println "El registro de inventario no ha sido importado se debe importar"
+        //                 println "El registro de inventario no ha sido importado se debe importar"
 
                         SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("inventario")
                          def res=insert.execute(inventSuc)
@@ -138,11 +138,11 @@ class ImportadorDeDevoluciones{
                 }
 
                 if(devoDetCen){
-                   println "EL registro ya fue importado Solo actualizar"
+        //           println "EL registro ya fue importado Solo actualizar"
                   sqlCen.executeUpdate(devoSucDet, configDevoDet.updateSql)
 
                 }else{
-                   println "El registro no ha sido importado se debe importar"
+          //         println "El registro no ha sido importado se debe importar"
 
                   SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("devolucion_de_venta_det")
                    def res=insert.execute(devoSucDet)
@@ -156,7 +156,7 @@ class ImportadorDeDevoluciones{
     }
 
     def importadorDeVentaDevolucion(devolucionId,server){
-      println "Importando Por Server Fecha de Ventas "
+  //    println "Importando Por Server Fecha de Ventas "
       def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
       def sqlSuc=new Sql(dataSourceSuc)
       def sqlCen=new Sql(dataSource)
@@ -171,11 +171,11 @@ class ImportadorDeDevoluciones{
         def cfdiCen=sqlCen.firstRow(queryId,[cfdi.id])
 
         if(cfdiCen){
-           println "EL registro ya fue importado Solo actualizar"
+    //       println "EL registro ya fue importado Solo actualizar"
           sqlCen.executeUpdate(cfdi, config.updateSql)
 
         }else{
-           println "El registro no ha sido importado se debe importar"
+      //     println "El registro no ha sido importado se debe importar"
           SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("cfdi")
            def res=insert.execute(cfdi)
         }
@@ -186,10 +186,10 @@ class ImportadorDeDevoluciones{
         if(cxcSuc){
             def cxcCen=sqlCen.firstRow("select * from cuenta_por_cobrar where id=?",[cxcSuc.id])
           if(cxcCen){
-              println "El registro de cxc ya fue importado solo se debe actulizar"
+    //          println "El registro de cxc ya fue importado solo se debe actulizar"
               sqlCen.executeUpdate(cxcSuc, configCxc.updateSql)
           }else{
-             println "El registro de cxc no se ha importado se debe importar"
+    //         println "El registro de cxc no se ha importado se debe importar"
                SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("cuenta_por_cobrar")
                 def res=insert.execute(cxcSuc)
           }
@@ -204,10 +204,10 @@ class ImportadorDeDevoluciones{
 
 
             if(vtaCen){
-              println "El registro de venta ya fue importado solo se debe actulizar  "+vtaSuc.id
+      //        println "El registro de venta ya fue importado solo se debe actulizar  "+vtaSuc.id
                 sqlCen.executeUpdate(vtaSuc, configVta.updateSql)
             }else{
-              println "El registro de cxc no se ha importado se debe importar"
+        //      println "El registro de cxc no se ha importado se debe importar"
                 SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("venta")
                 def res=insert.execute(vtaSuc)
             }
@@ -217,9 +217,9 @@ class ImportadorDeDevoluciones{
 
                 if(ventasDet){
                     ventasDet.each{ ventaDet ->
-                        println "*** ************** ------ ++++++-------------------- VENTADET "+ventaDet
+          //              println "*** ************** ------ ++++++-------------------- VENTADET "+ventaDet
                         if(ventaDet.inventario_id){
-                          println "*** ************** ------ ++++++-------------------- VENTADET "
+        //                  println "*** ************** ------ ++++++-------------------- VENTADET "
                            def queryInv="select * from inventario where id = ?"
                             def invent=sqlSuc.firstRow(queryInv,[ventaDet.inventario_id])
                             def queryInvCen="select * from inventario where id=?"
@@ -227,10 +227,10 @@ class ImportadorDeDevoluciones{
                             def configInv=EntityConfiguration.findByName("Inventario")
                            if(inventCen){
 
-                                println "EL registro  de inventario ya fue importado Solo actualizar"
+          //                      println "EL registro  de inventario ya fue importado Solo actualizar"
                                 sqlCen.executeUpdate(invent, configInv.updateSql)
                             }else{
-                              println "El registro de inventario  no ha sido importado se debe importar"
+              //                println "El registro de inventario  no ha sido importado se debe importar"
                               SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("inventario")
                               def res=insert.execute(invent)
                             }
@@ -240,10 +240,10 @@ class ImportadorDeDevoluciones{
                         def ventaDetCen=sqlCen.firstRow(queryVentaDetCen,[ventaDet.id])
                         def configVentaDet=EntityConfiguration.findByName('VentaDet')
                         if(ventaDetCen){
-                          println "EL registro  de ventaDet ya fue importado Solo actualizar"
+            //              println "EL registro  de ventaDet ya fue importado Solo actualizar"
                           sqlCen.executeUpdate(ventaDet, configVentaDet.updateSql)
                         }else{
-                          println "El registro de ventaDet no ha sido importado se debe importar"
+              //            println "El registro de ventaDet no ha sido importado se debe importar"
                           SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("venta_det")
                           def res=insert.execute(ventaDet)
                         }
@@ -258,10 +258,10 @@ class ImportadorDeDevoluciones{
                           def configCorte=EntityConfiguration.findByName('InstruccionCorte')
 
                           if(corteCen){
-                            println "EL registro  de corte ya fue importado Solo actualizar"
+              //              println "EL registro  de corte ya fue importado Solo actualizar"
                             sqlCen.executeUpdate(corte, configCorte.updateSql)
                           }else{
-                            println "El registro de corte no ha sido importado se debe importar"
+                //            println "El registro de corte no ha sido importado se debe importar"
                             SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("instruccion_corte")
                             def res=insert.execute(corte)
                           }

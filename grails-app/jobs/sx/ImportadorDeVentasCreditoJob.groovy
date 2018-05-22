@@ -12,7 +12,7 @@ class ImportadorDeVentasCreditoJob {
 
       println "************************************************************"
       println "*                                                          *"
-      println "*            Importando Ventas Credito                     *"
+      println "*            Importando Ventas Credito     ${new Date()}  "
       println "*                                                          *"
       println "************************************************************"
 

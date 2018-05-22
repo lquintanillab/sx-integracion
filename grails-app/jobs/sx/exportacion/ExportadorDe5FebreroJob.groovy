@@ -18,7 +18,7 @@ class ExportadorDe5FebreroJob {
 
       println "************************************************************"
       println "*                                                          *"
-      println "*                    Exportando 5 Febrero                  *"
+      println "*                    Exportando 5 Febrero  ${new Date()}                 *"
       println "*                                                          *"
       println "************************************************************"
 

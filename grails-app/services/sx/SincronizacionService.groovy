@@ -14,12 +14,12 @@ class SincronizacionService {
 
         clientes.each{cl->
 
-            println "Cliente   "+cl.persistedObjectId
+        //    println "Cliente   "+cl.persistedObjectId
 
             def sucursales=Sucursal.findAllByActiva(true)
 
             sucursales.each{ sucursal ->
-                println sucursal.nombre
+    //            println sucursal.nombre
 
                 AuditLog audit=new AuditLog()
 
@@ -67,7 +67,7 @@ class SincronizacionService {
             def sucursales=Sucursal.findAllByActiva(true)
 
             sucursales.each{ sucursal ->
-                println sucursal.nombre
+  //              println sucursal.nombre
 
                 AuditLog audit=new AuditLog()
 

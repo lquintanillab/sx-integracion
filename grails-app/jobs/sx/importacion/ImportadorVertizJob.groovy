@@ -15,26 +15,26 @@ class ImportadorVertizJob {
 
            println "************************************************************"
            println "*                                                          *"
-           println "*                    Importando Vertiz Dos                 *"
+           println "*                    Importando Vertiz Dos ${new Date()}                 *"
            println "*                                                          *"
            println "************************************************************"
 
            def sucursal = 'VERTIZ 176'
 
            try{
-             println "importando Existencias: "+sucursal
+            // println "importando Existencias: "+sucursal
               importadorDeExistencias.importar(sucursal)
            }catch (Exception e){
                   e.printStackTrace()
           }
           try{
-             println "importando Clientes: "+sucursal
+          //   println "importando Clientes: "+sucursal
              importadorDeClientes.importar(sucursal)
           }catch (Exception e){
                  e.printStackTrace()
          }
          try{
-            println "importando ComunicacionEmpresa: "+sucursal
+        //    println "importando ComunicacionEmpresa: "+sucursal
             importadorDeClientes.importarComunicacionEmpresa(sucursal)
          }catch (Exception e){
                 e.printStackTrace()

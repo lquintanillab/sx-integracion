@@ -27,13 +27,13 @@ class ImportadorDeEmbarques{
     }
 
     def importar(fecha){
-      println ("Importando Embarques del : ${fecha.format('dd/MM/yyyy')}" )
+    //  println ("Importando Embarques del : ${fecha.format('dd/MM/yyyy')}" )
 
       def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
       def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
         servers.each(){server ->
-          println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
+    //      println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
           importarServerFecha(server,fecha)
         }
     }
@@ -43,14 +43,14 @@ class ImportadorDeEmbarques{
 
       def server=DataSourceReplica.findByServer(nombreSuc)
 
-      println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server.url} "
+    //  println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server.url} "
 
       importarServerFecha(server,fecha)
 
     }
 
     def importarServerFecha(server,fecha){
-      println "Importando Por Server Fecha   "+fecha+ "   "+server.server
+    //  println "Importando Por Server Fecha   "+fecha+ "   "+server.server
       def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
       def sqlSuc=new Sql(dataSourceSuc)
       def sqlCen=new Sql(dataSource)
@@ -64,11 +64,11 @@ class ImportadorDeEmbarques{
       embarquesSuc.each{embarqueSuc ->
             def embarqueCen=sqlCen.firstRow(queryEmb,[embarqueSuc.id])
             if(!embarqueCen){
-              println "Importando Embarque"+ embarqueSuc.id
+          //    println "Importando Embarque"+ embarqueSuc.id
               SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("embarque")
               def res=insert.execute(embarqueSuc)
             }else{
-              println "Ya Importado Embarque"+ embarqueSuc.id
+          //    println "Ya Importado Embarque"+ embarqueSuc.id
             }
 
             def queryEnvios="Select * from envio where embarque_id=?"
@@ -78,11 +78,11 @@ class ImportadorDeEmbarques{
                   def queryEnvio="Select * from envio where id=?"
                   def envioCen=sqlCen.firstRow(queryEnvio,[envioSuc.id])
                   if(!envioCen){
-                    println "Importando Envio"+ envioSuc.id
+                //    println "Importando Envio"+ envioSuc.id
                     SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("envio")
                     def res=insert.execute(envioSuc)
                   }else{
-                    println "Ya Importado Envio"+ envioSuc.id
+                //    println "Ya Importado Envio"+ envioSuc.id
                   }
 
                   def queryEnviosDet="select * from envio_det where envio_id=?"
@@ -92,11 +92,11 @@ class ImportadorDeEmbarques{
                         def queryEnvioDet="Select * from envio_det where id=? "
                         def envioDetCen=sqlCen.firstRow(queryEnvioDet,[envioDetSuc.id])
                         if(!envioDetCen){
-                          println "Importando EnvioDet"+ envioDetSuc.id
+                    //      println "Importando EnvioDet"+ envioDetSuc.id
                           SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("envio_det")
                           def res=insert.execute(envioDetSuc)
                         }else{
-                          println "Ya Importado EnvioDet"+ envioDetSuc.id
+                      //    println "Ya Importado EnvioDet"+ envioDetSuc.id
                         }
                   }
             }

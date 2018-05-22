@@ -17,7 +17,7 @@ class ExportadorDeVertizJob {
 
       println "************************************************************"
       println "*                                                          *"
-      println "*                   Ex portando Vertiz                     *"
+      println "*                   Ex portando Vertiz   ${new Date()}                   *"
       println "*                                                          *"
       println "************************************************************"
 

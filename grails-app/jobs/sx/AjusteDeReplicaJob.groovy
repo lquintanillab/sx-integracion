@@ -8,11 +8,10 @@ def sincronizacionService
       cron name:   'ajusteReplica',   startDelay: 10000, cronExpression: '0 0/1 * * * ?'
     }
 
-    def execute() {
-
+  def execute() {
       println "************************************************************"
       println "*                                                          *"
-      println "*                    Ajustando Replica                     *"
+      println "*                    Ajustando Replica ${new Date()}  "
       println "*                                                          *"
       println "************************************************************"
 

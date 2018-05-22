@@ -17,7 +17,7 @@ class ExportadorTacubaJob {
 
         println "************************************************************"
         println "*                                                          *"
-        println "*                    Exportando Tacuba Dos                 *"
+        println "*                    Exportando Tacuba Dos   ${new Date()}               *"
         println "*                                                          *"
         println "************************************************************"
         def sucursal = 'TACUBA'
@@ -42,5 +42,6 @@ class ExportadorTacubaJob {
              }catch (Exception e){
                     e.printStackTrace()
             }
+
       }
 }

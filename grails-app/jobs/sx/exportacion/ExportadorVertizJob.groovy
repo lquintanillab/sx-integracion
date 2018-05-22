@@ -17,7 +17,7 @@ class ExportadorVertizJob {
 
         println "************************************************************"
         println "*                                                          *"
-        println "*                   Exportando Vertiz Dos                  *"
+        println "*                   Exportando Vertiz Dos   ${new Date()}                *"
         println "*                                                          *"
         println "************************************************************"
 

@@ -8,9 +8,10 @@ class ImportadorDeInventariosJob {
     }
 
     def execute() {
+
       println "************************************************************"
       println "*                                                          *"
-      println "*              Importador De inventarioSuc                 *"
+      println "*              Importador De inventarioSuc  ${new Date()}  "
       println "*                                                          *"
       println "************************************************************"
 

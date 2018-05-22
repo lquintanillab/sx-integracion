@@ -26,7 +26,7 @@ class ExportadorDeVales{
 
 
   def exportar(){
-      println ("Exportando Vales" )
+    //  println ("Exportando Vales" )
 
         def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
@@ -34,7 +34,7 @@ class ExportadorDeVales{
 
         servers.each{server ->
 
-          println "Exportando Vales para "+server.server
+        //  println "Exportando Vales para "+server.server
           exportarServer(server)
         }
   }
@@ -60,7 +60,7 @@ class ExportadorDeVales{
     def queryId="select * from solicitud_de_traslado  where id=?"
 
     audits.each{ audit ->
-        println audit
+      //  println audit
         def solCen=sqlCen.firstRow(queryId,[audit.persisted_object_id])
 
         if(solCen || audit.event_name=='DELETE'){
@@ -69,7 +69,7 @@ class ExportadorDeVales{
               try{
                     switch(audit.event_name) {
                       case 'INSERT':
-                      println "Insertando Vale"
+                    //  println "Insertando Vale"
                       def solSuc=sqlSuc.firstRow(queryId,[solCen.id])
                       if(!solSuc){
                         SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
@@ -92,9 +92,9 @@ class ExportadorDeVales{
                       break
 
                       case 'UPDATE':
-                          println "Actualizando Vale"
+                      //    println "Actualizando Vale"
                           int updated=sqlSuc.executeUpdate(solCen, config.updateSql)
-                          println "************************************"
+                    //      println "************************************"
                           def partidasCen=sqlCen.rows("select * from solicitud_de_traslado_det where solicitud_de_traslado_id=?",[solCen.id])
                           partidasCen.each{ detalle ->
                               sqlSuc.executeUpdate(detalle, configDet.updateSql)
@@ -119,7 +119,7 @@ class ExportadorDeVales{
                     }
 
               }catch (DuplicateKeyException dk) {
-                       println dk.getMessage()
+                  //     println dk.getMessage()
                    //    println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
                        sqlSuc.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
 

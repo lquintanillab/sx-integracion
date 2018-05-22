@@ -17,7 +17,7 @@ class ExportadorDeTacubaJob {
 
       println "************************************************************"
       println "*                                                          *"
-      println "*                    Exportando Tacuba                     *"
+      println "*                    Exportando Tacuba   ${new Date()}                  *"
       println "*                                                          *"
       println "************************************************************"
       def sucursal = 'TACUBA'

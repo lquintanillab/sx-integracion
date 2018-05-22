@@ -9,9 +9,10 @@ class ImportadorDeAplicacionesJob {
     }
 
     def execute() {
+
       println "************************************************************"
       println "*                                                          *"
-    println "*            Importando aplicaciones COD                     *"
+    println "*            Importando aplicaciones COD    ${new Date()}  "
       println "*                                                          *"
       println "************************************************************"
 

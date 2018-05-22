@@ -9,7 +9,7 @@ def exportadorDeTraslados
     }
 
     def execute() {
-/*
+
       println "************************************************************"
       println "*                                                          *"
       println "*                    Exportando Traslados                  *"
@@ -21,6 +21,6 @@ def exportadorDeTraslados
         }catch(Exception e ){
           e.printStackTrace()
         }
-*/
+
     }
 }
