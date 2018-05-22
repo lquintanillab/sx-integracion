@@ -27,7 +27,6 @@ class ImportadorDeVentasCredito{
       def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
       servers.each(){server ->
-
         println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
         importarServer(server)
       }
@@ -37,7 +36,6 @@ class ImportadorDeVentasCredito{
   def importarSucursal(nombreSuc){
 
     def server=DataSourceReplica.findByServer(nombreSuc)
-
 
     println "nombre: ${nombreSuc}  URL: ${server.url} "
 
@@ -53,7 +51,7 @@ class ImportadorDeVentasCredito{
 
       def config= EntityConfiguration.findByName("Cfdi")
 
-      def queryAuditLog="select c.*,a.persisted_object_id from audit_log a join cfdi c on(a.persisted_object_id=c.id) join cuenta_por_cobrar u on (u.cfdi_id=c.id) where date_replicated is null and u.tipo='CRE' AND event_name='INSERT' order by a.date_created"
+      def queryAuditLog="select c.*,a.persisted_object_id from audit_log a join cfdi c on(a.persisted_object_id=c.id) join cuenta_por_cobrar u on (u.cfdi_id=c.id) where date_replicated is null and u.tipo in ('CRE','COD') AND event_name='INSERT' order by a.date_created"
 
       def cfdis=sqlSuc.rows(queryAuditLog)
 

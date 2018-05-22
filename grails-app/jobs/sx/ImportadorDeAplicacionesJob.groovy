@@ -1,21 +1,22 @@
 package sx
 
-class ImportadorDeInventariosJob {
+class ImportadorDeAplicacionesJob {
 
-  def importadorDeInventarios
+    def importadorDeAplicacionesCOD
+
     static triggers = {
-      cron name:   'impInv',   startDelay: 10000, cronExpression: '0 0 21 * * ?'
+        cron name:   'impApl',   startDelay: 20000, cronExpression: '0 0/15 * * * ?'
     }
 
     def execute() {
       println "************************************************************"
       println "*                                                          *"
-      println "*              Importador De inventarioSuc                 *"
+    println "*            Importando aplicaciones COD                     *"
       println "*                                                          *"
       println "************************************************************"
 
       try{
-        importadorDeInventarios.importar()
+        importadorDeAplicacionesCOD.importar()
       }catch(Exception e){
         e.printStackTrace()
       }

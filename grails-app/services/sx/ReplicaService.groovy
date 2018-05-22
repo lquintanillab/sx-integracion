@@ -267,96 +267,80 @@ class ReplicaService {
 
       def query="Select * from audit_log where name= ${entityName} and date_replicated is null "
 
-    //   println "***  Exportando  Por ReplicaService: ****  "+entityName
+      println "***  Exportando  Por ReplicaService: ****  "+entityName+"  ************ "+serverName
+
         def server=DataSourceReplica.findAllByActivaAndCentralAndServer(true,false,serverName)
+
+        println "***  Exportando  Por ReplicaService: ****  "+entityName+"  ************ "+server.server
 
         def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
 
         def datasourceCentral=dataSourceLocatorService.dataSourceLocator(central.server)
 
-        def centralSql=new Sql(datasourceCentral)
+        def sqlCen=new Sql(datasourceCentral)
 
+        def dataSourceSuc=dataSourceLocatorService.dataSourceLocator(server.server)
 
-        ///   println "***  Exportando ReplicaService a: ${server.server} ******* ${server.url}****  "
-
-
-            def datasourceTarget=dataSourceLocatorService.dataSourceLocator(server.server)
-
-
-            def targetSql=new Sql(datasourceTarget)
-
-
-
-            centralSql.rows(query+" and target='${server.server}'").each { audit ->
-
-
+        def sqlSuc=new Sql(dataSourceSuc)
+println "*** ***************************************"
+         sqlCen.rows(query+" and target='${serverName}'").each { audit ->
+println "------------------------------------------------"
                 def config= EntityConfiguration.findByName(audit.name)
 
                 if(config){
+                    def sqlEntity="select * from $config.tableName where $config.pk=?"
 
-                    def origenSql="select * from $config.tableName where $config.pk=?"
+                    def row=sqlCen.firstRow(sqlEntity, [audit.persisted_object_id])
+                   if(audit.event_name=='DELETE' || row){
+                          try{
 
-                    def row=centralSql.firstRow(origenSql, [audit.persisted_object_id])
-                    if(audit.event_name=='DELETE' || row){
-
-                        try {
                             switch (audit.event_name) {
 
                                 case 'INSERT':
-                                   // println 'Insertando '+row
-                                    SimpleJdbcInsert insert=new SimpleJdbcInsert(datasourceTarget).withTableName(config.tableName)
+                                    println 'Insertando '+row
+                                    SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSourceSuc).withTableName(config.tableName)
                                     def res=insert.execute(row)
-                                   // println 'Registros Exportados: '+res
-                                    if(res){
-                                        centralSql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
-                                    }
 
+                                    if(res){
+                                        println '***************  Actualizando audit log'+audit.id
+                                        sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
+                                    }
                                     break
+
                                 case 'UPDATE':
-                                    int updated=targetSql.executeUpdate(row, config.updateSql)
+                                    println 'Actualizando '+row
+                                    int updated=sqlSuc.executeUpdate(row, config.updateSql)
                                     if(updated) {
                                         println '***************  Actualizando audit log'+audit.id
-                                        centralSql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ACTUALIZADO: ", audit.id])
+                                        sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ACTUALIZADO: ", audit.id])
                                     }else{
                                         println '***************  No se actualizo'+audit.id
                                     }
                                     break
                                 case 'DELETE':
-                                    targetSql.execute("DELETE FROM ${config.tableName} WHERE ${config.pk}=?",[audit.persisted_object_id])
 
-                                    def res=targetSql.firstRow("SELECT *  FROM ${config.tableName} WHERE ${config.pk}=?",[audit.persisted_object_id])
-
-                                    sql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ELIMINADO",audit.id])
                                     break;
                                 default:
                                     break;
                             }
 
+                          }
+                          catch (DuplicateKeyException dk) {
+                              println dk.getMessage()
+                            //  println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
+                              sqlCen.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
 
-                        }
-                        catch (DuplicateKeyException dk) {
-                            println dk.getMessage()
-                          //  println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
-                            centralSql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
+                          }catch (Exception e){
+                              //e.printStackTrace()
+                              log.error(e)
+                              String err="Error importando a central: "+ExceptionUtils.getRootCauseMessage(e)
+                            }
+                  }
 
-                        }catch (Exception e){
-                            //e.printStackTrace()
-                            log.error(e)
-                            String err="Error importando a central: "+ExceptionUtils.getRootCauseMessage(e)
-                            centralSql.execute("UPDATE AUDIT_LOG SET MESSAGE=?,DATE_REPLICATED=null WHERE ID=? ", [err,audit.id])
-                        }
+              }
+       }
 
-                    }
-
-                }
-
-            }
-
-
-
-    }
-
-
+  }
 
 
 }

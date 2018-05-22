@@ -55,86 +55,9 @@ class ImportadorDeRecepcionDeCompras {
     def importarServerFecha(server,fecha){
 
       println "Importando Por Server Fecha"+fecha.format('yyyy/MM/dd')
-      def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
-      def sqlSuc=new Sql(dataSourceSuc)
-      def sqlCen=new Sql(dataSource)
 
-      def config= EntityConfiguration.findByName("RecepcionDeCompra")
-      def configDet= EntityConfiguration.findByName("RecepcionDeCompraDet")
-      def configInv= EntityConfiguration.findByName("Inventario")
-
-      def querySuc="Select * from recepcion_de_compra where fecha=?"
-
-      def entradas=sqlSuc.rows(querySuc,[fecha.format('yyyy/MM/dd')])
-
-      entradas.each{entradaSuc ->
-
-        def queryCen="Select * from recepcion_de_compra where id=? "
-
-        def entradaCen=sqlCen.firstRow(queryCen,[entradaSuc.id])
-
-        if(entradaCen){
-          println "EL registro de entrada ya fue importado Solo actualizar"
-            sqlCen.executeUpdate(entradaSuc, config.updateSql)
-        }else{
-          println "El registro de entrada no ha sido importado se debe importar  "+entradaSuc.id
-
-          SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("recepcion_de_compra")
-          def res=insert.execute(entradaSuc)
-        }
-
-        def queryPartidas="Select * from recepcion_de_compra_det where recepcion_id=?"
-        def partidas=sqlSuc.rows(queryPartidas,[entradaSuc.id])
-
-            partidas.each{partidaSuc ->
-
-                println "Partida  "+partidaSuc.id
-
-              def queryPartidaCen="Select * from recepcion_de_compra_det where id=?"
-              def partidaCen=sqlCen.firstRow(queryPartidaCen,[partidaSuc.id])
-
-              if(partidaSuc.inventario_id){
-
-                  def queryInv="Select * from inventario where id=?"
-
-                  def inventarioSuc=sqlSuc.firstRow(queryInv,[partidaSuc.inventario_id])
-
-                  def inventarioCen=sqlCen.firstRow(queryInv,[partidaSuc.inventario_id])
-
-                  if(inventarioCen){
-                      sqlCen.executeUpdate(inventarioSuc, configInv.updateSql)
-                  }else{
-                    SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("inventario")
-                    def res=insert.execute(inventarioSuc)
-                  }
-
-
-              }
-
-              if(partidaCen){
-                println "EL registro de partida ya fue importado Solo actualizar"
-                sqlCen.executeUpdate(partidaSuc, configDet.updateSql)
-              }else{
-                println "El registro de partida no ha sido importado se debe importar"
-                SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("recepcion_de_compra_det")
-                def res=insert.execute(partidaSuc)
-              }
-
-
-      }
-
-      }
     }
 
-    def importadorInventarioCompras(fecha){
 
-      println "Importando Por Server Fecha"+fecha.format('yyyy/MM/dd')
-      def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
-      def sqlSuc=new Sql(dataSourceSuc)
-      def sqlCen=new Sql(dataSource)
-
-      def configInv= EntityConfiguration.findByName("Inventario")
-      def configDet= EntityConfiguration.findByName("RecepcionDeCompraDet")
-    }
 
 }

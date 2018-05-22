@@ -8,6 +8,7 @@ import groovy.sql.Sql
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.dao.DuplicateKeyException
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert
+import sx.Sucursal
 
 @Component
 class ImportadorDeCompras {
@@ -59,12 +60,14 @@ class ImportadorDeCompras {
       def sqlSuc=new Sql(dataSourceSuc)
       def sqlCen=new Sql(dataSource)
 
+      def sucursal=Sucursal.findByNombre(server.server)
+
       def config= EntityConfiguration.findByName("Compra")
       def configDet= EntityConfiguration.findByName("CompraDet")
 
-      def querySuc="Select * from compra where fecha=?"
+      def querySuc="Select * from compra where cerrada is not null and fecha=? and sucursal_id=?"
 
-      def compras=sqlSuc.rows(querySuc,[fecha.format('yyyy/MM/dd')])
+      def compras=sqlSuc.rows(querySuc,[fecha,sucursal.id])
 
       compras.each{ compraSuc ->
 
@@ -73,16 +76,10 @@ class ImportadorDeCompras {
         def queryCen="Select * from compra where id=?"
         def compraCen=sqlCen.firstRow(queryCen,[compraSuc.id])
 
-            if(compraCen){
-              println "EL registro de compra ya fue importado Solo actualizar"
-                sqlCen.executeUpdate(compraSuc, config.updateSql)
-            }else{
-
+            if(!compraCen){
               println "El registro de compra no ha sido importado se debe importar"
-
               SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("compra")
               def res=insert.execute(compraSuc)
-
             }
 
             def queryPartidas="Select * from compra_det where compra_id=?"
@@ -93,10 +90,7 @@ class ImportadorDeCompras {
                   def queryPartidaCen="Select * from compra_det where id=?"
                   def partidaCen=sqlCen.firstRow(queryPartidaCen,[partidaSuc.id])
 
-                  if(partidaCen){
-                    println "EL registro de partida ya fue importado Solo actualizar"
-                    sqlCen.executeUpdate(partidaSuc, configDet.updateSql)
-                  }else{
+                  if(!partidaCen){
                     println "El registro de partida no ha sido importado se debe importar"
                     SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("compra_det")
                     def res=insert.execute(partidaSuc)

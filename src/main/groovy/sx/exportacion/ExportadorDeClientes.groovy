@@ -33,4 +33,13 @@ class ExportadorDeClientes{
     replicaService.exportar('Cliente',nombreSuc)
   }
 
+
+  def exportarComunicacionEmpresa(){
+    replicaService.exportar('ComunicacionEmpresa')
+  }
+
+  def exportarComunicacionEmpresa(nombreSuc){
+    replicaService.exportar('ComunicacionEmpresa',nombreSuc)
+  }
+
 }

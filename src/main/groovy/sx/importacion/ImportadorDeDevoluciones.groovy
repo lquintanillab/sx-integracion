@@ -67,7 +67,7 @@ class ImportadorDeDevoluciones{
 
       def queryDevSuc="select * from devolucion_de_venta where date(fecha)=?"
 
-      def devolucionesSuc=sqlSuc.rows(queryDevSuc,[fecha])
+      def devolucionesSuc=sqlSuc.rows(queryDevSuc,[fechaImpo])
 
       def queryDevCen="select * from devolucion_de_venta where id=?"
 

@@ -37,4 +37,5 @@ class AuditLog {
             dateCreated nullable: true
             message nullable: true
         }
+        
 }

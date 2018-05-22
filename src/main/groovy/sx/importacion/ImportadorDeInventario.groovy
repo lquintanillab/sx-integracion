@@ -12,7 +12,7 @@ import org.springframework.jdbc.core.simple.SimpleJdbcInsert
 
 
 @Component
-class ImportadorDeInventarios{
+class ImportadorDeInventario{
 
   @Autowired
   @Qualifier('dataSourceLocatorService')
@@ -74,12 +74,12 @@ class ImportadorDeInventarios{
 
           if(!invCen){
             println "El registro de inventario no ha sido importado se debe importar"
-            SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("inventario")
-            def res=insert.execute(inventarioSuc)
+          //  SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("inventario")
+          //  def res=insert.execute(inventarioSuc)
 
           }else{
             println "EL registro de inventario ya fue importado Solo actualizar"
-            sqlCen.executeUpdate(inventarioSuc, configInv.updateSql)
+            //sqlCen.executeUpdate(inventarioSuc, configInv.updateSql)
           }
             def table=""
           switch(inventarioSuc.tipo) {
@@ -130,39 +130,24 @@ class ImportadorDeInventarios{
               if(moviSuc){
                 println "------------------------Partida"+moviSuc.id
                 def moviCen=sqlCen.firstRow(queryMov,[movId.id])
-                try{
-                    if(!moviCen){
-                      println "------------------------Importar"+moviSuc.id
-                      SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName(table)
-                      def res=insert.execute(moviSuc)
-                    }else{
-                      def config= EntityConfiguration.findByTableName(table)
-                      sqlCen.executeUpdate(moviSuc, config.updateSql)
-                    }
-                }catch(Exception e){
-                  e.printStackTrace()
-                }
 
+                if(!moviCen){
+                  println "------------------------Importar"+moviSuc.id
+                //  SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("${table}")
+                //  def res=insert.execute(moviSuc)
+                }
               }
             }
-            def partidaCen=sqlCen.firstRow(queryPartida,[partidaSuc.id])
-            def tableDet=table+'_det'
-            try{
-                if(!partidaCen){
-                  println "Importando movimiento partida"+partidaSuc.id +" ---- "+ partidaSuc.inventario_id
+            def partidaCen=sqlCen.firstRow(queryPartida,[inventarioSuc.id])
+            if(!partidaCen){
+              println "Importando movimiento partida"+partidaSuc.id +" ---- "+ partidaSuc.inventario_id
 
-                SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName(tableDet)
-                def res=insert.execute(partidaSuc)
-                }else{
-                  println "Actualizando movimiento partida"+partidaSuc.id +" ---- "+ partidaSuc.inventario_id
-                  def configDet= EntityConfiguration.findByTableName(tableDet)
-                  sqlCen.executeUpdate(partidaSuc, configDet.updateSql)
+            //SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("${table}_det")
+            //    def res=insert.execute(partidaSuc)
+            }else{
+              println "Actualizando movimiento partida"+partidaSuc.id +" ---- "+ partidaSuc.inventario_id
 
-                }
-            }catch(Exception e){
-              e.printStackTrace()
             }
-
 
 
           }
