@@ -79,7 +79,7 @@ class ImportadorDeAplicacionesCOD{
                 if(cobroCen){
 
                    println "El cobro ya existe"
-                   sqlCen.executeUpdate(cobro, configCobro.updateSql)
+                   sqlCen.executeUpdate(cobroSuc, configCobro.updateSql)
                 }else{
                    println "El cobro NO existe"
 
