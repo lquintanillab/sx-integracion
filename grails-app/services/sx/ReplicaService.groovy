@@ -142,6 +142,129 @@ class ReplicaService {
 
 
     }
+    def importarServer(serverName){
+
+      println "***  Importando de Por ReplicaService: ****  "+serverName+"eMBARQUESS"
+
+
+        def query="Select * from audit_log where name in ('EMBARQUE','ENVIO','VENTA','INVENTARIO','VENTADET','ENVIODET') and date_replicated is null "
+
+        def server=DataSourceReplica.findAllByActivaAndCentralAndServer(true,false,serverName)
+
+        def central=DataSourceReplica.findAllByActivaAndCentral(true,true)
+
+        def datasourceCentral=dataSourceLocatorService.dataSourceLocator(central.server)
+
+        def centralSql=new Sql(datasourceCentral)
+
+
+
+             //   println "***  Importando de Por ReplicaService: ${server.server} ******* ${server.url}****  "
+
+            def datasourceOrigen=dataSourceLocatorService.dataSourceLocator(server.server)
+
+
+            def sql=new Sql(datasourceOrigen)
+
+
+            sql.rows(query).each{audit ->
+
+                def config= EntityConfiguration.findByName(audit.name)
+
+               println "Importando       " +audit.name+"  ---------  "+audit.persisted_object_id+"   "+config
+
+                if(config){
+
+                    def origenSql="select * from $config.tableName where $config.pk=?"
+
+
+                    def row=sql.firstRow(origenSql, [audit.persisted_object_id])
+                    if(audit.event_name=='DELETE' || row){
+                        try {
+                            switch (audit.event_name) {
+
+                                case 'INSERT':
+                                //    println 'Insertando '+row
+                                    SimpleJdbcInsert insert=new SimpleJdbcInsert(datasourceCentral).withTableName(config.tableName)
+
+                                    def res=insert.execute(row)
+
+                                    if(res){
+                                //        println '*************** Registros importados: '+res
+                                        sql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["IMPORTADO",audit.id])
+                                    }else{
+                                 //       println '***************  No se encontraron registros para insertar'
+                                        sql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["REVISAR",audit.id])
+                                    }
+
+                                    break
+                                case 'UPDATE':
+
+                                //    println "****************************** Actualizando "+audit.name+"  ******  "+audit.persisted_object_id
+                                    int updated=centralSql.executeUpdate(row, config.updateSql)
+                                    if(updated){
+                                    //    println "Se actualizo el registro se va a crear auditLog"
+                                        sql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ACTUALIZADO: ",audit.id])
+                                    }else{
+                                        sql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["REVISAR ",audit.id])
+                                    }
+
+                                    break
+                                case 'DELETE':
+
+                                    def res=centralSql.firstRow("SELECT *  FROM ${config.tableName} WHERE ${config.pk}=?",[audit.persisted_object_id])
+
+                                    if(res){
+                                        def rs= centralSql.execute("DELETE FROM ${config.tableName} WHERE ${config.pk}=?",[audit.persisted_object_id])
+                                        sql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["ELIMINADO",audit.id])
+                                    }else{
+                                        sql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["REGISTRO NO EXISTENTE EN EL TARGET",audit.id])
+                                    }
+
+                                    break;
+                                default:
+                                    break;
+                            }
+
+                            afterImport(audit,server)
+                            if(config.name == 'SolicitudDeTraslado' || config.name == 'SolicitudDeTrasladoDet' ){
+                                afterImportVales( audit, row, centralSql)
+                            }
+                            if(config.name == 'Traslado' || config.name == 'TrasladoDet' ){
+
+                              //  println "Importando" +config.name
+                                afterImportTraslados(audit,row,server,centralSql )
+                            }
+
+
+                        }
+                        catch (DuplicateKeyException dk) {
+                        //    println dk.getMessage()
+                          //  println "Registro duplicado ${audit.id} -- ${audit.persisted_object_id}"
+                            sql.execute("UPDATE AUDIT_LOG SET DATE_REPLICATED=NOW(),MESSAGE=? WHERE ID=? ", ["Registro duplicado",audit.id])
+
+                        }catch (Exception e){
+                            //e.printStackTrace()
+                            log.error(e)
+                            String err="Error importando a central: "+ExceptionUtils.getRootCauseMessage(e)
+                            sql.execute("UPDATE AUDIT_LOG SET MESSAGE=?,DATE_REPLICATED=NOW() WHERE ID=? ", [err,audit.id])
+                        }
+
+
+                    }
+                    else{
+
+                       // println '***************  No se encontraron registros para insertar'+audit.id
+
+                    }
+                }
+                else{
+                  //  println "No tiene registro de configuracion"
+                }
+            }
+
+
+    }
 
     def afterImport(def auditOrigen,def serverOrigen ){
 

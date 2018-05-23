@@ -17,7 +17,7 @@ class Exportador5FebreroJob {
 
             println "************************************************************"
             println "*                                                          *"
-            println "*                    Exportando 5 Febrero Dos              *"
+            println "*                    Exportando 5 Febrero Dos ${new Date()}  *"
             println "*                                                          *"
             println "************************************************************"
 
@@ -43,6 +43,6 @@ class Exportador5FebreroJob {
            }catch (Exception e){
                   e.printStackTrace()
           }
-          
+
       }
 }

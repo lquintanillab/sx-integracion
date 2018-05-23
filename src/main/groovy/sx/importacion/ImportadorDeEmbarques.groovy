@@ -79,6 +79,14 @@ class ImportadorDeEmbarques{
                   def envioCen=sqlCen.firstRow(queryEnvio,[envioSuc.id])
                   if(!envioCen){
                 //    println "Importando Envio"+ envioSuc.id
+                  def ventaCen=sqlCen.firstRow("select * from venta where id=?",[envioSuc.origen])
+
+                  if(!ventaCen){
+                    def ventaSuc=sqlSuc.firstRow("select * from venta where id=?",[envioSuc.origen])
+                    SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("venta")
+                    def res=insert.execute(ventaSuc)
+                  }
+
                     SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("envio")
                     def res=insert.execute(envioSuc)
                   }else{
@@ -92,6 +100,13 @@ class ImportadorDeEmbarques{
                         def queryEnvioDet="Select * from envio_det where id=? "
                         def envioDetCen=sqlCen.firstRow(queryEnvioDet,[envioDetSuc.id])
                         if(!envioDetCen){
+
+                            def ventaDetCen=sqlCen.firstRow("select * from venta_Det where id=?",[envioDetSuc.venta_det_id])
+                            if(!ventaDetCen){
+                              def ventaDetSuc=sqlSuc.firstRow("select * from venta_Det where id=?",[envioDetSuc.venta_det_id])
+                              SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("venta_det")
+                              def res=insert.execute(ventaDetSuc)
+                            }
                     //      println "Importando EnvioDet"+ envioDetSuc.id
                           SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("envio_det")
                           def res=insert.execute(envioDetSuc)

@@ -15,7 +15,7 @@ class ImportadorSolisJob {
 
      println "************************************************************"
      println "*                                                          *"
-     println "*                    Importando Solis Dos ${new Date()}                 *"
+       println "*                    Importando Solis Dos ${new Date()}                 *"
      println "*                                                          *"
      println "************************************************************"
 
