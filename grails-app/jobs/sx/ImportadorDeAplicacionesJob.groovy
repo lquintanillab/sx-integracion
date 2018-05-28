@@ -5,7 +5,7 @@ class ImportadorDeAplicacionesJob {
     def importadorDeAplicacionesCOD
 
     static triggers = {
-        cron name:   'impApl',   startDelay: 20000, cronExpression: '0 0/15 * * * ?'
+        cron name:   'impApl',   startDelay: 20000, cronExpression: '0 0/10 * * * ?'
     }
 
     def execute() {

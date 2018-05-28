@@ -2,10 +2,10 @@ package sx.importacion
 
 class ImportadorDeVertizJob {
 
-      def importadorDeExistencias
-      def importadorDeClientes
+
       def importadorDeVales
       def importadorDeTraslados
+      def replicaService
 
         static triggers = {
         cron name:   'impVertiz',   startDelay: 20000, cronExpression: '0 0/4 * * * ?'
@@ -26,12 +26,20 @@ class ImportadorDeVertizJob {
          }catch (Exception e){
                 e.printStackTrace()
         }
+
+
         try{
         //   println "importando Traslados: "+sucursal
            importadorDeTraslados.importarSucursal(sucursal)
         }catch (Exception e){
                e.printStackTrace()
        }
+       try{
+          println "******************************importando Embarques********************************** "+sucursal
+          replicaService.importarServer(sucursal)
+       }catch (Exception e){
+              e.printStackTrace()
+      }
 
 
         }

@@ -27,41 +27,11 @@ class ImportadorDeEmbarque{
 
 
     def importar(){
-      try{
-        replicaService.importar('Embarque')
-      }catch(Exception e){
-        e.printStackTrace()
-      }
-      try{
-          replicaService.importar('Envio')
-      }catch(Exception e){
-        e.printStackTrace()
-      }
-      try{
-        replicaService.importar('EnvioDet')
-      }catch(Exception e){
-        e.printStackTrace()
-      }
+          def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
-    }
-
-    def importar(nombreSuc){
-
-      try{
-        replicaService.importar('Embarque',nombreSuc)
-      }catch(Exception e){
-        e.printStackTrace()
-      }
-      try{
-          replicaService.importar('Envio',nombreSuc)
-      }catch(Exception e){
-        e.printStackTrace()
-      }
-      try{
-        replicaService.importar('EnvioDet',nombreSuc)
-      }catch(Exception e){
-        e.printStackTrace()
-      }
+          servers.each{server -
+              replicaService.importarServer(server.server)
+          }
     }
 
 

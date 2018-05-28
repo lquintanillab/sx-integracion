@@ -2,10 +2,10 @@ package sx.importacion
 
 class ImportadorDeAndradeJob {
 
-    def importadorDeExistencias
-    def importadorDeClientes
+
     def importadorDeVales
     def importadorDeTraslados
+    def replicaService
 
       static triggers = {
       cron name:   'impAndrade',   startDelay: 20000, cronExpression: '0 0/4 * * * ?'
@@ -33,6 +33,12 @@ class ImportadorDeAndradeJob {
       }catch (Exception e){
              e.printStackTrace()
      }
+     try{
+        println "******************************importando Embarques********************************** "+sucursal
+      replicaService.importarServer(sucursal)
+     }catch (Exception e){
+            e.printStackTrace()
+    }
 
       }
 }

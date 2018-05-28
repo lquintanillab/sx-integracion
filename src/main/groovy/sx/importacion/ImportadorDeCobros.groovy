@@ -82,16 +82,19 @@ class ImportadorDeCobros{
                 def queryChe="select * from cobro_cheque where cobro_id=?"
                 def queryCheCen="select * from cobro_cheque where id=?"
                 def cheque=sqlSuc.firstRow(queryChe,[row.id])
-                def foundChe=sqlCen.firstRow(queryCheCen,cheque.id)
-                if(foundChe){
-                //   println "EL registro del cheque ya fue importado Solo actualizar"
-                  sqlCen.executeUpdate(cheque, configChe.updateSql)
+                if(cheque){
+                  def foundChe=sqlCen.firstRow(queryCheCen,cheque.id)
+                  if(foundChe){
+                  //   println "EL registro del cheque ya fue importado Solo actualizar"
+                    sqlCen.executeUpdate(cheque, configChe.updateSql)
 
-                }else{
-                //   println "El registro del cheque no ha sido importado se debe importar"
-                  SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("cobro_cheque")
-                   def res=insert.execute(cheque)
+                  }else{
+                  //   println "El registro del cheque no ha sido importado se debe importar"
+                    SimpleJdbcInsert insert=new SimpleJdbcInsert(dataSource).withTableName("cobro_cheque")
+                     def res=insert.execute(cheque)
+                  }
                 }
+
 
               break
 

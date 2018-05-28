@@ -1,11 +1,25 @@
 package sx
 
 class ImportadorDeEmbarquesJob {
+
+    def importadorDeEmbarque
+
     static triggers = {
-      simple repeatInterval: 5000l // execute job once in 5 seconds
+      cron name:   'impEmb',   startDelay: 20000, cronExpression: '0 0/5 * * * ?'
     }
 
     def execute() {
-        // execute job
+
+      println "************************************************************"
+      println "*                                                          *"
+      println "*            Importando Embarques     ${new Date()}  "
+      println "*                                                          *"
+      println "************************************************************"
+
+      try{
+          immportadorDeEmbarque.importar()
+      }catch(Exception e){
+        e.printStackTrace()
+      }
     }
 }

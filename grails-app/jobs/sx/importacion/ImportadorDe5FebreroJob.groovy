@@ -2,10 +2,10 @@ package sx.importacion
 
 class ImportadorDe5FebreroJob {
 
-  def importadorDeExistencias
-  def importadorDeClientes
+
   def importadorDeVales
   def importadorDeTraslados
+  def replicaService
 
 
     static triggers = {
@@ -34,6 +34,13 @@ class ImportadorDe5FebreroJob {
     }catch (Exception e){
            e.printStackTrace()
    }
+
+   try{
+      println "******************************importando Embarques********************************** "+sucursal
+      replicaService.importarServer(sucursal)
+   }catch (Exception e){
+          e.printStackTrace()
+  }
 
     }
 }

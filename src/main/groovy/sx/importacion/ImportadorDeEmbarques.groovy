@@ -23,10 +23,6 @@ class ImportadorDeEmbarques{
 
 
     def importar(){
-        importar(new Date())
-    }
-
-    def importar(fecha){
     //  println ("Importando Embarques del : ${fecha.format('dd/MM/yyyy')}" )
 
       def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)

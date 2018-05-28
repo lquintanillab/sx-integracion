@@ -144,10 +144,10 @@ class ReplicaService {
     }
     def importarServer(serverName){
 
-      println "***  Importando de Por ReplicaService: ****  "+serverName+"eMBARQUESS"
+    //  println "***  Importando de Por ReplicaService: ****  "+serverName+"eMBARQUESS"
 
 
-        def query="Select * from audit_log where name in ('EMBARQUE','ENVIO','VENTA','INVENTARIO','VENTADET','ENVIODET') and date_replicated is null "
+        def query="Select * from audit_log where name in ('EMBARQUE','ENVIO','ENVIODET') and date_replicated is null "
 
         def server=DataSourceReplica.findAllByActivaAndCentralAndServer(true,false,serverName)
 
@@ -171,7 +171,7 @@ class ReplicaService {
 
                 def config= EntityConfiguration.findByName(audit.name)
 
-               println "Importando       " +audit.name+"  ---------  "+audit.persisted_object_id+"   "+config
+          //     println "Importando       " +audit.name+"  ---------  "+audit.persisted_object_id+"   "+config
 
                 if(config){
 
