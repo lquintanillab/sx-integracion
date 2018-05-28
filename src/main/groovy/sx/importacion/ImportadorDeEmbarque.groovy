@@ -29,7 +29,7 @@ class ImportadorDeEmbarque{
     def importar(){
           def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
-          servers.each{server -
+          servers.each{server ->
               replicaService.importarServer(server.server)
           }
     }
