@@ -1,11 +1,11 @@
-package sx
+  package sx
 
 class ImportadorDeDevolucionesJob {
 
 def importadorDeDevoluciones
 
     static triggers = {
-       cron name:   'impDevoluciones',   startDelay: 10000, cronExpression: '0 30 20 * * ?'
+       cron name:   'impDevoluciones',   startDelay: 10000, cronExpression: '0 30 * * * ?'
     }
 
     def execute() {

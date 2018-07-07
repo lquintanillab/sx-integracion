@@ -12,9 +12,6 @@ class ReplicaService {
       def servers=DataSourceReplica.findAllByActivaAndCentral(true,false)
 
       servers.each{ server ->
-
-        //println "--------------"+server.server+" ---------------- "+server.url+" ---------------- "+entityName
-
         importar(entityName,server.server)
       }
     }

@@ -93,6 +93,56 @@ class ImportadorDeCancelaciones{
           //    println "Actualizando cuenta_por_cobrar de "+cancelacion.uuid
               def cxcSuc=sqlSuc.firstRow(queryCxcSuc,[cxcCen.id])
               sqlCen.executeUpdate(cxcSuc, configCxc.updateSql)
+
+              def queryVenta="select * from venta where cuenta_por_cobrar_id=?"
+              def queryAplicacion="select * from aplicacion_de_cobro where cuenta_por_cobrar_id=?"
+              def queryCobro="select * from cobro where id=?"
+
+              def ventaCen=sqlCen.firstRow(queryVenta,[cxcCen.id])
+
+              if(ventaCen){
+                def ventaSuc=sqlSuc.firstRow(queryVenta,[cxcCen.id])
+                def configVenta=EntityConfiguration.findByName("Venta")
+                sqlCen.executeUpdate(ventaSuc,configVenta.updateSql)
+
+                def queryventasDet="select * from venta_det where venta_id=?"
+
+                def ventasDet= sqlCen.rows(queryventasDet,[ventaCen.id])
+
+                ventasDet.each{ventaDet ->
+
+                  def inventarioID=ventaDet.inventario_id
+
+                  def queryDet="select * from venta_det where id=?"
+                  def detSUC=sqlSuc.firstRow(queryDet,[ventaDet.id]);
+
+                  def configDetSuc=EntityConfiguration.findByName("VentaDet")
+                  sqlCen.executeUpdate(detSuc,configDetSuc.updateSql)
+
+                  def queryinventario="select * from inventario where id=?"
+
+                  def inventario =sqlCen.firstRow(queryInventario,[inventarioId])
+
+                  if(inventario){
+                      sqlCen.execute("Delete from inventario where id=?",inventarioID)
+                  }
+
+
+                }
+              }
+
+              def aplicacionesCen=sqlCen.rows(queryAplicacion,[cxcCen.id])
+
+              aplicacionesCen.each{ aplicacionCen ->
+                  def cobroId=aplicacionCen.cobro_id
+                  sqlCen.execute("delete * from aplicacion_de_cobro where cobro_id=?",[cobroId]);
+                  sqlCen.execute("delete * from cobro where id=?",[cobroId])
+
+              }
+
+
+
+
           }
 
 

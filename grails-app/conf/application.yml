@@ -144,7 +144,7 @@ environments:
              validationInterval: 15000
 ---
 quartz:
-    autoStartup: true
+    autoStartup: false
 ---
 server:
   port: 8090

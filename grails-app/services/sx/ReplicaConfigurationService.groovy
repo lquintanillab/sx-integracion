@@ -62,6 +62,11 @@ class ReplicaConfigurationService {
 
   }
 
+  def  instalarConfiguraciones(String entityStr){
+    def entity=EntityReplicable.findByName(entityStr)
+    instalarConfiguracionesEntity(entity)
+  }
+
   def instalarConfiguracionesEntity(EntityReplicable entity){
 
       def config=EntityConfiguration.findByName(entity.name)
