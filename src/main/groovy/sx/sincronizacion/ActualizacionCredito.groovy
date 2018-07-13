@@ -64,10 +64,11 @@ def actualizarSaldo(){
 
           notas.each{nota ->
               def cobro=nota.cobro
-              def aplicaciones=cobro.aplicaciones.sum{it.importe}?:0
-              def saldo=cobro.importe-aplicaciones
-
-              totalNotas=totalNotas+saldo
+              if(cobro){
+                def aplicaciones=cobro.aplicaciones.sum{it.importe}?:0
+                def saldo=cobro.importe-aplicaciones
+                  totalNotas=totalNotas+saldo
+              }
           }
 
           def saldoReal=totalCxc+totalMoratorios-totalNotas
