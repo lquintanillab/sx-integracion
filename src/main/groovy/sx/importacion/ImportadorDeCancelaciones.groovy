@@ -46,8 +46,9 @@ class ImportadorDeCancelaciones{
   def importarSucursalFecha(nombreSuc,fecha){
 
     def server=DataSourceReplica.findByServer(nombreSuc)
-  //  println  "*************************************************************"
-  //  println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server.url} "
+    println  "*************************************************************"
+    println "nombre: ${nombreSuc} fecha: ${fecha.format('dd/MM/yyyy')} URL: ${server.url} "
+
 
     importarServerFecha(server,fecha)
 
@@ -57,7 +58,7 @@ class ImportadorDeCancelaciones{
 
     def fecha=fechaImpo.format('yyyy/MM/dd')
 
-  //  println "Importando Por Server Fecha   "+fecha+ "   "+server.server
+    println "Importando Por Server Fecha   "+server.server +" --  "+fecha+ "   "+server.server
     def dataSourceSuc=dataSourceLocatorService.dataSourceLocatorServer(server)
     def sqlSuc=new Sql(dataSourceSuc)
     def sqlCen=new Sql(dataSource)
@@ -101,7 +102,10 @@ class ImportadorDeCancelaciones{
               def ventaCen=sqlCen.firstRow(queryVenta,[cxcCen.id])
 
               if(ventaCen){
+
                 def ventaSuc=sqlSuc.firstRow(queryVenta,[cxcCen.id])
+                if(ventaSuc){
+                                    println "--"+ventaCen.id
                 def configVenta=EntityConfiguration.findByName("Venta")
                 sqlCen.executeUpdate(ventaSuc,configVenta.updateSql)
 
@@ -127,6 +131,8 @@ class ImportadorDeCancelaciones{
                       sqlCen.execute("Delete from inventario where id=?",inventarioID)
                   }
 
+                }
+               
 
                 }
               }

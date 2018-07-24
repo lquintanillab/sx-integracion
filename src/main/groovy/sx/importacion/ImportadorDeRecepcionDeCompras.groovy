@@ -54,7 +54,7 @@ class ImportadorDeRecepcionDeCompras {
 
     def importarServerFecha(server,fecha){
 
-  //    println "Importando Por Server Fecha"+fecha.format('yyyy/MM/dd')
+      println "Importando Por Server Fecha  "+server.server+" -- "+fecha.format('yyyy/MM/dd')
 
     }
 

@@ -68,7 +68,7 @@ class ExportadorDeTraslados{
   //    println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++"+trdCen.id
                 switch(audit.event_name) {
                   case 'INSERT':
-                    println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++INSERT    "+trdCen.id
+                  //  println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++INSERT    "+trdCen.id
 
                     def trdSuc=sqlSuc.firstRow(queryId,[trdCen.id])
 
@@ -93,7 +93,7 @@ class ExportadorDeTraslados{
                 //  }
                   break
                   case 'UPDATE':
-                    println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++UPDATE    "+trdCen.id
+               //     println "++++++++++++++++++++++++++++++++++++++++++++++++++++++++++UPDATE    "+trdCen.id
                       //int updated=sqlSuc.executeUpdate(trdCen, config.updateSql)
                     //  println "************************************"
                       def partidasCen=sqlCen.rows("select * from traslado_det where traslado_id=?",[trdCen.id])

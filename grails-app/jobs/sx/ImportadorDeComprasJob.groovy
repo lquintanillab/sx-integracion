@@ -5,7 +5,7 @@ class ImportadorDeComprasJob {
     def importadorDeCompras
 
     static triggers = {
-      cron name:   'impCompras',   startDelay: 10000, cronExpression: '0 0/30 * * * ?'
+      cron name:   'impCompras',   startDelay: 10000, cronExpression: '0 0/20 * * * ?'
     }
 
     def execute() {
@@ -17,7 +17,7 @@ class ImportadorDeComprasJob {
       println "************************************************************"
 
       try{
-        importadorDeCompras.importar()
+        //importadorDeCompras.importar()
       }catch(Exception e){
         e.printStackTrace()
       }
