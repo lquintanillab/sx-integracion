@@ -5,7 +5,7 @@ class ImportadorDepositosJob {
 def importadorDeDepositos
 
     static triggers = {
-       cron name:   'impDepositos',   startDelay: 10000, cronExpression: '0 0/3 8-19 ? * MON-SAT'
+       cron name:   'impDepositos',   startDelay: 10000, cronExpression: '0 0/5 * ? * MON-SAT'
     }
 
     def execute() {

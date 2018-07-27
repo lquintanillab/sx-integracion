@@ -9,6 +9,8 @@ class DataSourceReplica {
 
     String url
 
+    String urlAlternativa
+
     String username
 
     String password
@@ -25,6 +27,7 @@ class DataSourceReplica {
         ip nullable : true
         server nullable: true
         url nullable: true
+        urlAlternativa nullable:true
         username nullable: true
         password nullable: true
         dataBase nullable: true

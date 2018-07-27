@@ -5,7 +5,7 @@ class ImportadorDeVentasCreditoJob {
   def importadorDeVentasCredito
 
     static triggers = {
-      cron name:   'impVtasCre',   startDelay: 20000, cronExpression: '0 0/5 * * * ?'
+      cron name:   'impVtasCre',   startDelay: 20000, cronExpression: '0 0/15 * * * ?'
     }
 
     def execute() {

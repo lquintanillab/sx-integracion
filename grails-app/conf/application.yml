@@ -101,7 +101,7 @@ environments:
     development:
        dataSource:
          dbCreate: none
-         url: jdbc:mysql://10.10.1.229/siipapx?autoReconnect=false
+         url: jdbc:mysql://papel.dyndns-remote.com/siipapx?autoReconnect=true
          password: sys
          properties:
            maxActive: 20
@@ -144,7 +144,7 @@ environments:
              validationInterval: 15000
 ---
 quartz:
-    autoStartup: false
+    autoStartup: true
 ---
 server:
   port: 8090

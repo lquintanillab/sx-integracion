@@ -5,7 +5,7 @@ class ImportadorDeValesJob {
 def importadorDeVales
 
     static triggers = {
-         cron name:   'impVales',   startDelay: 10000, cronExpression: '0 0/3 * * * ?'
+         cron name:   'impVales',   startDelay: 10000, cronExpression: '0 0/5 * * * ?'
     }
 
     def execute() {
